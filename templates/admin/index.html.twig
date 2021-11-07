@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block adminNavbar %}
+    <div class="example-wrapper">
+        <div class="admin-header__container">
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_user") }}>Users</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_story") }}>Stories</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_fandom") }}>Fandoms</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_category") }}>Categories</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_status") }}>Statuses</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_tag") }}>Tags</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_character") }}>Characters</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_mpaaRating") }}>MpaaRating</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

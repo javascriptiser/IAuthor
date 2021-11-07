@@ -1,0 +1,58 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        <h1>Stories</h1>
+        <div>
+            {% for story in pagination %}
+                <div>
+                    <h4>
+                        Части
+                    </h4>
+                    {% for story_part in story.getStoryParts %}
+                        {{ story_part.parts.title }}
+                    {% endfor %}
+                </div>
+                <div>
+                    <h4>
+                        Теги
+                    </h4>
+                    {% for tag in story.getTags %}
+                        {{ tag.name }}
+                    {% endfor %}
+                </div>
+                <div>
+                    <h1>
+                        Персонажи
+                    </h1>
+                    {% for character in story.getCharacters %}
+                        {{ character.name }}
+                    {% endfor %}
+                </div>
+                <div>
+                    <div>
+                        <div>
+                            {{ story.id }}
+                        </div>
+                        <div>
+                            {{ story.title }}
+                        </div>
+                    </div>
+                    <div>
+                        <a class="btn btn-primary btn-sm" href={{ path('story_edit',{id:story.id}) }}>
+                            Edit
+                        </a>
+                        <a class="btn btn-primary btn-sm" href={{ path('story_delete',{id:story.id}) }}>
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination,'twitter_bootstrap_v3_pagination.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

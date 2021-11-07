@@ -1,0 +1,42 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        <h1>Statuses</h1>
+        <div class="knp_pagination_filter">
+            {{ knp_pagination_filter(pagination, {'s.id':'ID','s.name':'Name'},template = 'twitter_bootstrap_v4_filtration.html.twig') }}
+        </div>
+        <div>
+            <a class="btn btn-primary btn-sm" href={{ path('mpaaRating_create') }}>
+                Add new MpaaRating
+            </a>
+        </div>
+        <table class="table table-hover table-responsive">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+            {% for mpaaRating in pagination %}
+                <tr>
+                    <td>{{ mpaaRating.id }}</td>
+                    <td>{{ mpaaRating.name }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href={{ path('mpaaRating_edit',{id:mpaaRating.id}) }}>
+                            Edit
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href={{ path('mpaaRating_delete',{id:mpaaRating.id}) }}>
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="navigation text-center">
+        {{ knp_pagination_render(pagination,'twitter_bootstrap_v3_pagination.html.twig') }}
+    </div>
+{% endblock %}

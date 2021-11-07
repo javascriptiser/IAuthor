@@ -1,0 +1,28 @@
+@media (max-width: 993px) {
+    .navbar-container_inner {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .navbar-container {
+        width: 100%;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        position: relative;
+    }
+    .navbar-container_inner_left .custom-switch{
+        margin-top: 5px;
+        margin-left: 0;
+    }
+    .navbar-container_inner_home {
+        position: static;
+        top: 0;
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .navbar-container_inner_home-text{
+        font-size: 1.25rem;
+    }
+}

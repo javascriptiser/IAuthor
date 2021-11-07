@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Parts{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <div class="my-custom-class-for-errors">
+        {{ form_errors(form) }}
+    </div>
+
+    <div class="row">
+        {{ form_row(form.title) }}
+        {{ form_row(form.text) }}
+        {{ form_row(form.commentBeforePart) }}
+        {{ form_row(form.commentAfterPart) }}
+        {{ form_row(form.save) }}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
