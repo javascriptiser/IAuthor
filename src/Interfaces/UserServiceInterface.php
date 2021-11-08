@@ -4,27 +4,31 @@
 namespace App\Interfaces;
 
 
+use App\Entity\BaseEntity;
 use App\Entity\User;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-interface UserServiceInterface
+interface UserServiceInterface extends BaseEntityServiceInterface
 {
     /**
-     * @param User $user
-     * @param UserPasswordHasherInterface $passwordHasher
+     * @param User|BaseEntity $baseEntity
+     * @return bool
      */
-    public function createUser(User $user, UserPasswordHasherInterface $passwordHasher): void;
+    public function isUserInstance(User|BaseEntity $baseEntity): bool;
 
     /**
-     * @param User $user
-     * @param UserPasswordHasherInterface $passwordHasher
+     * @param User|BaseEntity $baseEntity
      */
-    public function editUser(User $user, UserPasswordHasherInterface $passwordHasher): void;
+    public function create(User|BaseEntity $baseEntity): void;
 
     /**
-     * @param User $user
+     * @param User|BaseEntity $baseEntity
      */
-    public function deleteUser(User $user): void;
+    public function update(User|BaseEntity $baseEntity): void;
+
+    /**
+     * @param User|BaseEntity $baseEntity
+     */
+    public function delete(User|BaseEntity $baseEntity): void;
 
 
 }

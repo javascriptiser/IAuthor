@@ -4,62 +4,52 @@ namespace App\Controller;
 
 use App\Entity\Fandom;
 use App\Form\FandomType;
-use App\Interfaces\FandomServiceInterface;
-use App\Service\FandomService;
-use App\Voter\AdminVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class FandomController extends AbstractController
 {
-    private FandomServiceInterface $fandomService;
+    private BaseController $baseController;
 
     public function __construct
     (
-        FandomService $fandomService
+        BaseController $baseController,
     )
     {
-        $this->fandomService = $fandomService;
+        $this->baseController = $baseController;
     }
 
     #[Route('/admin/fandom/create', name: 'fandom_create')]
     public function createFandom(Request $request): Response
     {
-        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
-        $form = $this->createForm(FandomType::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->fandomService->createFandom($form->getData());
-            return new RedirectResponse($this->generateUrl('admin_fandom'));
-        }
-        return $this->render('fandom/fandomCreate.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->baseController->create(
+            $request,
+            new FandomType(),
+            'admin_fandom',
+            'fandom/fandomCreate.html.twig',
+        );
     }
 
-    #[Route('/admin/fandom/edit/{id}', name: 'fandom_edit')]
-    public function editFandom(Request $request, Fandom $fandom): Response
+    #[Route('/admin/fandom/update/{id}', name: 'fandom_update')]
+    public function updateFandom(Request $request, Fandom $fandom): Response
     {
-        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
-        $form = $this->createForm(FandomType::class, $fandom);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->fandomService->editFandom($form->getData());
-            return new RedirectResponse($this->generateUrl('admin_fandom'));
-        }
-        return $this->render('fandom/fandomCreate.html.twig', [
-            'form' => $form->createView()
-        ]);
+        return $this->baseController->update(
+            $request,
+            new FandomType(),
+            $fandom,
+            'admin_fandom',
+            'fandom/fandomCreate.html.twig',
+        );
     }
 
     #[Route('/admin/fandom/delete/{id}', name: 'fandom_delete')]
-    public function deleteFandom (Fandom $fandom): Response
+    public function deleteFandom(Fandom $fandom): Response
     {
-        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
-        $this->fandomService->deleteFandom($fandom);
-        return new RedirectResponse($this->generateUrl('admin_fandom'));
+        return $this->baseController->delete(
+            $fandom,
+            'admin_fandom',
+        );
     }
 }

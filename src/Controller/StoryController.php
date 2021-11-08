@@ -4,62 +4,59 @@ namespace App\Controller;
 
 use App\Entity\Story;
 use App\Form\StoryType;
-use App\Interfaces\StoryServiceInterface;
 use App\Service\StoryService;
-use App\Voter\AdminVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class StoryController extends AbstractController
 {
-    private StoryServiceInterface $storyService;
+    private BaseController $baseController;
 
     public function __construct
     (
-        StoryService  $storyService,
+        BaseController $baseController,
+        StoryService   $storyService,
+        Security       $security,
     )
     {
-        $this->storyService = $storyService;
+        $this->baseController = $baseController;
+        $storyService->setUser($security->getUser());
+        $this->baseController->setService($storyService);
     }
 
     #[Route('/admin/story/create', name: 'story_create')]
     public function createStory(Request $request): Response
     {
-        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
-        $form = $this->createForm(StoryType::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->storyService->createStory($form->getData(), $this->getUser());
-            return new RedirectResponse($this->generateUrl('admin_story'));
-        }
-        return $this->render('story/index.html.twig', [
-            'form' => $form->createView(),
-        ]);
+
+        return $this->baseController->create(
+            $request,
+            new StoryType(),
+            'admin_story',
+            'story/index.html.twig',
+        );
     }
 
-    #[Route('/admin/story/edit/{id}', name: 'story_edit')]
-    public function editStory(Request $request, Story $story): Response
+    #[Route('/admin/story/update/{id}', name: 'story_update')]
+    public function updateStory(Request $request, Story $story): Response
     {
-        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
-        $form = $this->createForm(StoryType::class, $story);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->storyService->editStory($form->getData(), $this->getUser());
-            return new RedirectResponse($this->generateUrl('admin_story'));
-        }
-        return $this->render('story/index.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->baseController->update(
+            $request,
+            new StoryType(),
+            $story,
+            'admin_story',
+            'story/index.html.twig',
+        );
     }
 
     #[Route('/admin/story/delete/{id}', name: 'story_delete')]
-    public function deleteStory (Story $story): Response
+    public function deleteStory(Story $story): Response
     {
-        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
-        $this->storyService->deleteStory($story);
-        return new RedirectResponse($this->generateUrl('admin_story'));
+        return $this->baseController->delete(
+            $story,
+            'admin_story',
+        );
     }
 }

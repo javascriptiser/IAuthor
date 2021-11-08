@@ -4,26 +4,24 @@
 namespace App\Interfaces;
 
 
+use App\Entity\BaseEntity;
 use App\Entity\Story;
-use App\Entity\User;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-interface StoryServiceInterface
+
+interface StoryServiceInterface extends BaseEntityServiceInterface
 {
     /**
-     * @param Story $story
-     * @param UserInterface $user
+     * @param Story|BaseEntity $baseEntity
      */
-    public function createStory(Story $story, UserInterface $user): void;
+    public function create(Story|BaseEntity $baseEntity): void;
 
     /**
-     * @param Story $story
-     * @param UserInterface $user
+     * @param Story|BaseEntity $entity
      */
-    public function editStory(Story $story, UserInterface $user): void;
+    public function update(Story|BaseEntity $entity): void;
 
     /**
-     * @param Story $story
+     * @param Story|BaseEntity $entity
      */
-    public function deleteStory(Story $story): void;
+    public function delete(Story|BaseEntity $entity): void;
 }

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=TagRepository::class)
  */
-class Tag
+class Tag extends \App\Entity\BaseEntity
 {
     /**
      * @ORM\Id

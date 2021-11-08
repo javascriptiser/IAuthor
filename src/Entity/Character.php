@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=CharacterRepository::class)
  * @ORM\Table(name="`character`")
  */
-class Character
+class Character extends BaseEntity
 {
     /**
      * @ORM\Id

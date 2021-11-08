@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=FandomRepository::class)
  */
-class Fandom
+class Fandom extends \App\Entity\BaseEntity
 {
     /**
      * @ORM\Id

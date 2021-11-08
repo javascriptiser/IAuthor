@@ -2,11 +2,11 @@
 
 namespace App\Service;
 
-use App\Entity\Category;
-use App\Interfaces\CategoryServiceInterface;
+use App\Entity\BaseEntity;
+use App\Interfaces\BaseEntityServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
-class CategoryService implements CategoryServiceInterface
+class BaseEntityService implements BaseEntityServiceInterface
 {
 
     private EntityManagerInterface $em;
@@ -20,26 +20,26 @@ class CategoryService implements CategoryServiceInterface
         $this->em = $em;
     }
 
-    public function createCategory(Category $category): void
+    public function create(BaseEntity $entity): void
     {
-        $this->em->persist($category);
+        $this->em->persist($entity);
         $this->em->flush();
     }
 
     /**
-     * @param Category $category
+     * @param BaseEntity $entity
      */
-    public function editCategory(Category $category): void
+    public function update(BaseEntity $entity): void
     {
         $this->em->flush();
     }
 
     /**
-     * @param Category $category
+     * @param BaseEntity $entity
      */
-    public function deleteCategory(Category $category): void
+    public function delete(BaseEntity $entity): void
     {
-        $this->em->remove($category);
+        $this->em->remove($entity);
         $this->em->flush();
     }
 }

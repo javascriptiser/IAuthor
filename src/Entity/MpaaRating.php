@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=MpaaRatingRepository::class)
  */
-class MpaaRating
+class MpaaRating extends \App\Entity\BaseEntity
 {
     /**
      * @ORM\Id

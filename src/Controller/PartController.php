@@ -2,15 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
-use App\Entity\Parts;
-use App\Form\CategoryType;
-use App\Form\FandomType;
 use App\Form\PartType;
-use App\Interfaces\CategoryServiceInterface;
 use App\Interfaces\PartsServiceInterface;
 use App\Repository\PartsRepository;
-use App\Service\CategoryService;
 use App\Service\PartService;
 use App\Voter\AdminVoter;
 use Doctrine\ORM\NonUniqueResultException;
@@ -56,26 +50,5 @@ class PartController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/category/edit/{id}', name: 'category_edit')]
-    public function editCategory(Request $request, Category $category): Response
-    {
-        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
-        $form = $this->createForm(CategoryType::class, $category);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->categoryService->editCategory($form->getData());
-            return new RedirectResponse($this->generateUrl('admin_category'));
-        }
-        return $this->render('category/categoryCreate.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
 
-    #[Route('/admin/category/delete/{id}', name: 'category_delete')]
-    public function deleteCategory (Category $category): Response
-    {
-        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
-        $this->categoryService->deleteCategory($category);
-        return new RedirectResponse($this->generateUrl('admin_category'));
-    }
 }

@@ -184,7 +184,6 @@ class AdminController extends AbstractController
             $request->query->getInt('page', 1),
             $request->query->getInt('limit', 7),
         );
-
         return $this->render('admin/indexStory.html.twig', [
             'pagination' => $pagination,
         ]);
