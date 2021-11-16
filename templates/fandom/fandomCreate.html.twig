@@ -7,10 +7,32 @@
     <div class="my-custom-class-for-errors">
         {{ form_errors(form) }}
     </div>
-
-    <div class="row">
-        {{ form_row(form.name) }}
-        {{ form_row(form.save) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.image, { 'attr':{'id':'imageInput'} }) }}
+    <div>
+        <p>Предпоказ</p>
+        <img src="
+        {% if prevImageName is defined and prevImageName is not null %}
+         {{ asset('uploads/') }}{{ prevImageName }}
+        {% else %}
+       {{ asset('images/defaultBanner.png') }}
+        {% endif %}"
+             id="imagePreview" height="100px">
     </div>
+    {{ form_row(form.save) }}
     {{ form_end(form) }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+        window.onload = function () {
+            const element = document.getElementById('fandom_image');
+            element.addEventListener('change', (event) => {
+                window.imageModule.readUrl(event.target)
+            })
+        }
+    </script>
 {% endblock %}

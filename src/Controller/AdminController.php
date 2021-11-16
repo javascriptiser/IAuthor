@@ -54,14 +54,6 @@ class AdminController extends AbstractController
         $this->paginator = $paginator;
     }
 
-    #[Route('/admin', name: 'admin')]
-    public function index(): Response
-    {
-        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
-        return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
-        ]);
-    }
 
     #[Route('/admin/user', name: 'admin_user')]
     public function indexUser(Request $request): Response

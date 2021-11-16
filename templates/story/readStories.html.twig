@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+    <style>
+        .stories-container {
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .stories-item {
+            background-color: #545050;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .stories-item__extrainfo {
+            display: flex;
+        }
+
+        .stories-item__extrainfo__item {
+            margin-right: 10px;
+        }
+
+        .stories-item__title a, .stories-item__fandom a, .stories-item__author a {
+            text-decoration: underline;
+        }
+
+        .stories-item__title a {
+            font-size: 24px;
+        }
+
+        .stories-item__tags {
+            margin-bottom: 5px;
+        }
+
+        .stories-item__tags a, .stories-item__characters a {
+            border-radius: 2px;
+            display: inline-flex;
+            font-size: 1em;
+            line-height: 1.3em;
+            padding-left: 4px;
+            padding-right: 4px;
+            background-color: var(--tag-default-backgroundColor);
+            color: var(--as-link);
+            transition: all .3s ease
+        }
+
+        .stories-item__description {
+            padding-top: 5px;
+            border-top: 1px dashed #e5dacc;
+        }
+
+    </style>
+    <div>
+        <div class="stories-container">
+            {% for story in stories %}
+                <div class="stories-item">
+                    <div class="stories-item__title">
+                        <a href="{{ path('story_read', {'id': story.id}) }}">
+                            {{ story.title }}
+                        </a>
+                    </div>
+                    <div class="stories-item__extrainfo">
+                        <div class="stories-item__extrainfo__item">
+                            {{ story.mpaaRating.name }}
+                        </div>
+                        <div class="stories-item__extrainfo__item">
+                            {{ story.status.name }}
+                        </div>
+                    </div>
+
+                    <div class="stories-item__author">Автор: <a href="/">{{ story.author.username }}</a></div>
+                    <div class="stories-item__fandom">
+                        Фэндом: <a href="{{ path('stories/fandom_show', {'id': story.fandom.id}) }}">
+                            {{ story.fandom.name }}
+                        </a></div>
+                    <div class="stories-item__characters">
+                        Персонажи:
+                        {% for character in story.characters %}
+                            <a href="{{ path('stories/character_show', {'id': character.id}) }}">
+                                {{ character.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                    <div class="stories-item__tags">
+                        Метки:
+                        {% for tag in story.tags %}
+                            <a href="{{ path('stories/tag_show', {'id': tag.id}) }}">
+                                {{ tag.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                    <div class="stories-item__description">
+                        {{ story.description }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="navigation text-center">
+        {{ knp_pagination_render(stories,'twitter_bootstrap_v3_pagination.html.twig') }}
+    </div>
+{% endblock %}
+
+

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=PartsRepository::class)
  */
-class Parts
+class Parts extends BaseEntity
 {
     /**
      * @ORM\Id
@@ -39,10 +39,6 @@ class Parts
      */
     private $comment_after_part;
 
-    /**
-     * @ORM\OneToMany(targetEntity=PartsOrder::class, mappedBy="part")
-     */
-    private $partsOrders;
 
     /**
      * @ORM\OneToMany(targetEntity=StoryParts::class, mappedBy="parts")
@@ -108,35 +104,6 @@ class Parts
         return $this;
     }
 
-    /**
-     * @return Collection|PartsOrder[]
-     */
-    public function getPartsOrders(): Collection
-    {
-        return $this->partsOrders;
-    }
-
-    public function addPartsOrder(PartsOrder $partsOrder): self
-    {
-        if (!$this->partsOrders->contains($partsOrder)) {
-            $this->partsOrders[] = $partsOrder;
-            $partsOrder->setPart($this);
-        }
-
-        return $this;
-    }
-
-    public function removePartsOrder(PartsOrder $partsOrder): self
-    {
-        if ($this->partsOrders->removeElement($partsOrder)) {
-            // set the owning side to null (unless already changed)
-            if ($partsOrder->getPart() === $this) {
-                $partsOrder->setPart(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|StoryParts[]

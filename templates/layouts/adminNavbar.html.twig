@@ -1,0 +1,45 @@
+{% block adminNavbar %}
+    <style>
+        .admin-header__container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+    </style>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="btn btn-primary"
+           data-toggle="collapse"
+           href="#collapseAdminNavbar"
+           role="button"
+           aria-expanded="false"
+           aria-controls="collapseAdminNavbar">
+            Показать административную панель
+        </a>
+        <div class="admin-header__container collapse" id="collapseAdminNavbar">
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_user") }}>Пользователи</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_story") }}>Рассказы</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_fandom") }}>Фэндомы</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_category") }}>Категории</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_status") }}>Статус</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_tag") }}>Метки</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_character") }}>Персонажи</a>
+            </div>
+            <div class="admin-header__item">
+                <a class="link-primary" href={{ path("admin_mpaaRating") }}>Рейтинг</a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

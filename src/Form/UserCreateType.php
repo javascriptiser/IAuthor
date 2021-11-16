@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,6 +21,14 @@ class UserCreateType extends AbstractType
             ->add('email', EmailType::class,[
                 'required'=>true,
                 'label'=>'Email'
+            ])
+            ->add('image', FileType::class, [
+                'required' => false,
+                'data_class' => null,
+                'label' => 'image',
+                'attr' => [
+                    'placeholder' => 'image'
+                ]
             ])
             ->add('username', TextType::class,[
                 'required'=>true,

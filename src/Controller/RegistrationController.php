@@ -9,6 +9,7 @@ use App\Interfaces\UserServiceInterface;
 use App\Security\EmailVerifier;
 use App\Service\MailService;
 use App\Service\UserService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +39,8 @@ class RegistrationController extends AbstractController
 
     /**
      * @throws TransportExceptionInterface
+     * @throws
+     * @throws Exception
      */
     #[Route('/registration', name: 'registration')]
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher): RedirectResponse|Response
@@ -48,7 +51,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->userService->createUser($user, $passwordHasher);
+            $this->userService->create($form);
             $this->mailService->sendEmail($user, $this->emailVerifier);
             return $this->redirectToRoute('app_login');
         }

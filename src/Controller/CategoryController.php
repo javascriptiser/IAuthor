@@ -4,21 +4,35 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Interfaces\CategoryServiceInterface;
+use App\Repository\CategoryRepository;
+use App\Repository\StoryRepository;
+use App\Service\CategoryService;
+use App\Voter\AdminVoter;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CategoryController extends AbstractController
 {
     private BaseController $baseController;
+    private CategoryService $categoryService;
 
     public function __construct
     (
-        BaseController    $baseController,
+        BaseController  $baseController,
+        CategoryService $categoryService,
     )
     {
         $this->baseController = $baseController;
+        $this->categoryService = $categoryService;
+        $this->baseController->setService($categoryService);
     }
 
     #[Route('/admin/category/create', name: 'category_create')]
@@ -26,30 +40,45 @@ class CategoryController extends AbstractController
     {
         return $this->baseController->create(
             $request,
-            new CategoryType(),
+            CategoryType::class,
             'admin_category',
             'category/categoryCreate.html.twig',
         );
     }
 
+    /**
+     * @throws Exception
+     */
     #[Route('/admin/category/update/{id}', name: 'category_update')]
     public function updateCategory(Request $request, Category $category): Response
     {
-        return $this->baseController->update(
-            $request,
-            new CategoryType(),
+        $prevImageName = $category->getImage();
+        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->categoryService->updateWithImage($prevImageName, $form);
+            return new RedirectResponse($this->generateUrl('admin_category'));
+        }
+        return $this->render('category/categoryCreate.html.twig', [
+            'form' => $form->createView(),
+            'prevImageName' => $prevImageName
+        ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route('/admin/category/delete/{id}', name: 'category_delete')]
+    public function deleteCategory(Request $request, Category $category): Response
+    {
+
+        return $this->baseController->deleteWithConfirmation($request,
             $category,
             'admin_category',
-            'category/categoryCreate.html.twig',
+            'admin_category',
         );
     }
 
-    #[Route('/admin/category/delete/{id}', name: 'category_delete')]
-    public function deleteCategory(Category $category): Response
-    {
-        return $this->baseController->delete(
-            $category,
-            'admin_category',
-        );
-    }
+
 }

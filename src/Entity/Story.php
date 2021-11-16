@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=StoryRepository::class)
  */
-class Story extends \App\Entity\BaseEntity
+class Story extends BaseEntity
 {
     /**
      * @ORM\Id
@@ -21,7 +21,7 @@ class Story extends \App\Entity\BaseEntity
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="stories")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false,onDelete="CASCADE")
      */
     private $category;
 
@@ -57,7 +57,6 @@ class Story extends \App\Entity\BaseEntity
      * @ORM\JoinColumn(nullable=false)
      */
     private $status;
-
 
 
     /**

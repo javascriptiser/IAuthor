@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\StoryPartsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=StoryPartsRepository::class)
@@ -19,7 +20,7 @@ class StoryParts
 
     /**
      * @ORM\ManyToOne(targetEntity=Story::class, inversedBy="storyParts")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false,onDelete="CASCADE")
      */
     private $story;
 
@@ -27,6 +28,11 @@ class StoryParts
      * @ORM\ManyToOne(targetEntity=Parts::class, inversedBy="storyParts")
      */
     private $parts;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $order_number;
 
     public function getId(): ?int
     {
@@ -53,6 +59,18 @@ class StoryParts
     public function setParts(?Parts $parts): self
     {
         $this->parts = $parts;
+
+        return $this;
+    }
+
+    public function getOrderNumber(): ?int
+    {
+        return $this->order_number;
+    }
+
+    public function setOrderNumber(?int $order_number): self
+    {
+        $this->order_number = $order_number;
 
         return $this;
     }

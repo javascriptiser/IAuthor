@@ -57,6 +57,11 @@ class User extends \App\Entity\BaseEntity implements UserInterface, PasswordAuth
      */
     private $emailIsVerified = false;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
     public function __construct()
     {
         $this->stories = new ArrayCollection();
@@ -207,6 +212,18 @@ class User extends \App\Entity\BaseEntity implements UserInterface, PasswordAuth
     public function setEmailIsVerified(bool $emailIsVerified): self
     {
         $this->emailIsVerified = $emailIsVerified;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

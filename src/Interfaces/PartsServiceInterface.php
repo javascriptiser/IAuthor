@@ -4,15 +4,16 @@
 namespace App\Interfaces;
 
 
-use App\Entity\Category;
 use App\Entity\Parts;
+use App\Entity\Story;
 
 interface PartsServiceInterface
 {
     /**
+     * @param Story $story
      * @param Parts $parts
      */
-    public function createPart(Parts $parts): void;
+    public function createPart(Story $story, Parts $parts): void;
 
     /**
      * @param Parts $parts
@@ -20,7 +21,8 @@ interface PartsServiceInterface
     public function editPart(Parts $parts): void;
 
     /**
-     * @param Parts $parts
+     * @param mixed $jsonData
+     * @param Story $story
      */
-    public function deletePart(Parts $parts): void;
+    public function reorderParts(mixed $jsonData, Story $story): void;
 }

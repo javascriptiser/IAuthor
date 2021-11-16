@@ -5,26 +5,42 @@ namespace App\Service;
 use App\Entity\BaseEntity;
 use App\Entity\Story;
 use App\Entity\User;
-use App\Interfaces\StoryServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class StoryService implements StoryServiceInterface
+class StoryService extends BaseEntityService
 {
 
     private EntityManagerInterface $em;
     private User $user;
+    private FileUploader $uploader;
 
     /**
      * FanficService constructor.
      * @param EntityManagerInterface $em
+     * @param FileUploader $uploader
      */
     public function __construct
     (
         EntityManagerInterface $em,
+        FileUploader           $uploader,
     )
     {
         $this->em = $em;
+        $this->uploader = $uploader;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function isStoryInstance(BaseEntity $baseEntity): bool
+    {
+        if (!$baseEntity instanceof Story) {
+            throw new Exception('Entity is not instanceof Story');
+        }
+        return true;
     }
 
     /**
@@ -36,20 +52,29 @@ class StoryService implements StoryServiceInterface
     }
 
     /**
-     * @param Story|BaseEntity $story
+     * @param FormInterface $form
+     * @throws Exception
      */
-    public function create(Story|BaseEntity $story): void
+    public function create(FormInterface $form): void
     {
-        $story->setAuthor($this->user);
+        $story = $form->getData();
+        if ($this->isStoryInstance($story)) {
+            $story->setAuthor($this->user);
+//            $image = $form->get('image')->getData();
+//            if ($image) {
+//                $this->uploader->upload($image);
+//            }
+        }
         $this->em->persist($story);
         $this->em->flush();
     }
 
     /**
-     * @param Story|BaseEntity $story
+     * @param FormInterface $form
      */
-    public function update(Story|BaseEntity $story): void
+    public function update(FormInterface $form): void
     {
+
         $this->em->flush();
     }
 

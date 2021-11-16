@@ -20,3 +20,13 @@ import 'popper.js';
 import 'bootstrap';
 import './js/colorThemingModule'
 import './js/swiper'
+import Sortable from 'sortablejs/modular/sortable.core.esm.js';
+import {imageModule} from "./js/imageModule";
+import 'cropperjs/dist/cropper.min'
+import 'cropperjs/dist/cropper.min.css'
+import 'jquery-cropper/dist/jquery-cropper.min'
+
+
+window.imageModule = imageModule;
+window.sortable = Sortable;
+

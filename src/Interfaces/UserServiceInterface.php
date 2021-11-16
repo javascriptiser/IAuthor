@@ -15,20 +15,5 @@ interface UserServiceInterface extends BaseEntityServiceInterface
      */
     public function isUserInstance(User|BaseEntity $baseEntity): bool;
 
-    /**
-     * @param User|BaseEntity $baseEntity
-     */
-    public function create(User|BaseEntity $baseEntity): void;
-
-    /**
-     * @param User|BaseEntity $baseEntity
-     */
-    public function update(User|BaseEntity $baseEntity): void;
-
-    /**
-     * @param User|BaseEntity $baseEntity
-     */
-    public function delete(User|BaseEntity $baseEntity): void;
-
 
 }

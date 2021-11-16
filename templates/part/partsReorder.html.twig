@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+    <style>
+        .my_story-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .my_story-container a {
+            color: var(--font-color)
+        }
+
+        .my_story-item-title a, .my_story_parts-item a {
+            transition: all .3s ease;
+        }
+
+        .my_story-item-title a:hover, .my_story_parts-item a:hover {
+            color: var(--font-color-hover);
+        }
+
+        .my_story_parts-item, .my_story_parts-item:not(:last-child) {
+            border-bottom: 1px dashed #e5dacc;
+        }
+
+        .my_story_parts-item {
+            text-decoration: underline;
+        }
+
+
+        .my_story_parts_management-item a {
+            border-radius: 3px;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 5px 10px;
+            background-color: var(--btn-default-backgroundColor);
+            border-color: var(--btn-default-borderColor);
+            color: var(--btn-default-color)
+        }
+
+    </style>
+
+    <div class="page-wrapper">
+        <h1>Изменения порядка частей в рассказе {{ story.title }}</h1>
+        <h5>
+            <a class="link-primary" href="{{ path('story_update', {'id': story.id}) }}">
+                Вернуться к работе.
+            </a>
+        </h5>
+        <h5>
+            Чтобы изменить порядок частей в работе, просто перетащите их на нужные места. Порядок сохраняется
+            автоматически.
+        </h5>
+        <div class="my_story-container">
+            <div class="my_story_parts-container">
+                {% for story_part in story_parts %}
+                    <div class="my_story_parts-item"
+                         data-sortable-id='{"part":{{ story_part.parts.id }}}'>
+                        <a class="link-primary"
+                           href={{ path("user_part_edit",
+                               {
+                                   partId:story_part.parts.id,
+                                   storyId:story_part.story.id
+                               }) }}
+                        >
+                            {{ story_part.parts.title }}
+                        </a>
+                    </div>
+                {% else %}
+                    Добавленных частей пока нет.
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        window.onload = function () {
+            const el = document.getElementsByClassName('my_story_parts-container')[0]
+            if (!!el) {
+                const sortable = window.sortable.create(el, {
+                    animation: 150,
+                    dataIdAttr: 'data-sortable-id',
+                    onSort: function () {
+                        const itemOrder = sortable.toArray();
+                        reorderParts({{ story.id }}, itemOrder);
+                    }
+                })
+            } else {
+                console.log('Sortable error')
+            }
+        };
+
+        function reorderParts(storyId, data) {
+            $.post({
+                url: `/user/profile/story/${storyId}/reorderPart`,
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: 'json',
+            }).done(function (e) {
+
+            })
+        }
+    </script>
+{% endblock %}

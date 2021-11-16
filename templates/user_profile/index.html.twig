@@ -3,18 +3,78 @@
 {% block title %}Hello UserProfileController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <style>
+        .user-header__container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            background-color: #ccc;
+            margin-left: 6px;
+        }
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        .user-header__content {
+            display: flex;
+            flex-direction: column;
+            margin-left: 7.5%;
+        }
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/D/Универ/Диплом/Проект/diplom/src/Controller/UserProfileController.php'|file_link(0) }}">src/Controller/UserProfileController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/D/Универ/Диплом/Проект/diplom/templates/user_profile/fandomCreate.html.twig'|file_link(0) }}">templates/user_profile/index.html.twig</a></code></li>
-    </ul>
-</div>
+        .user-header__title {
+            font-size: 32px;
+            font-family: Verdana, sans-serif;
+            margin-bottom: 10px;
+        }
+
+        .user-header__changeAvatarBtn {
+            background: var(--tag-default-backgroundColor);
+            color: var(--font-color);
+            font-size: 14px;
+            margin-bottom: 3px;
+            padding: 4px 12px;
+            white-space: nowrap;
+        }
+
+        .user-header__avatar img {
+            height: 70px;
+            margin: 10px;
+            width: 70px;
+            border-radius: 50%;
+        }
+
+        .page-wrapper {
+            display: grid;
+            grid-template-columns: 0.5fr 1.5fr;
+            grid-template-rows: 1fr;
+            gap: 48px 0px;
+            grid-template-areas:
+    ". .";
+        }
+
+    </style>
+    <div class="page-wrapper">
+        {{ include('layouts/userSettings.html.twig') }}
+        <div class="user-header__container">
+            <div class="user-header__avatar">
+                {% if user.image %}
+                    <img src="{{ asset('uploads/') }}{{ user.image }}" alt="">
+                {% else %}
+                    <img src="{{ asset('images/defaultBanner.png') }}" alt="">
+                {% endif %}
+            </div>
+            <div class="user-header__content">
+                <div class="user-header__title">
+                    <h1>{{ user.username }}</h1>
+                </div>
+                <div class="user-header__changeAvatarBtn">
+                    <a href="{{ path('user_avatar_update', {'id': user.id}) }}">
+                        Изменить аватар
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 {% endblock %}

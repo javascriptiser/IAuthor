@@ -2,6 +2,7 @@
     "devDependencies": {
         "@popperjs/core": "^2.10.2",
         "@symfony/stimulus-bridge": "^2.0.0",
+        "@symfony/ux-dropzone": "file:vendor/symfony/ux-dropzone/Resources/assets",
         "@symfony/webpack-encore": "^1.0.0",
         "bootstrap": "^4.6.1",
         "core-js": "^3.0.0",
@@ -21,7 +22,11 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "cropperjs": "^1.5.12",
+        "dropzone": "^6.0.0-beta.1",
+        "jquery-cropper": "^1.0.1",
         "select2": "^4.1.0-rc.0",
+        "sortablejs": "^1.14.0",
         "swiper": "^7.2.0"
     }
 }

@@ -1,0 +1,33 @@
+{% block userSettings %}
+    <style>
+        .user-settings__container {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--story-background-color);
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .user-settings__item {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+
+    <div class="user-settings__container">
+        <p>Настройки профиля</p>
+        <div class="user-settings__item">
+            <a href="/">Категории</a>
+        </div>
+        <div class="user-settings__item">
+            <a href="/">Авторы</a>
+        </div>
+        <div class="user-settings__item">
+            <a href="/">Популярное</a>
+        </div>
+        <div class="user-settings__item">
+            <a href="/">Заявки</a>
+        </div>
+    </div>
+{% endblock %}

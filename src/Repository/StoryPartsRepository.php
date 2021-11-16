@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\StoryParts;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,32 +21,42 @@ class StoryPartsRepository extends ServiceEntityRepository
         parent::__construct($registry, StoryParts::class);
     }
 
-    // /**
-    //  * @return StoryParts[] Returns an array of StoryParts objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findByPartsId($id)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('story_parts')
+            ->andWhere('story_parts.parts = :id')
+            ->setParameter('id', $id)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getOneOrNullResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?StoryParts
+    public function findByStoryId($id)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->createQueryBuilder('story_parts')
+            ->andWhere('story_parts.story = :id')
+            ->setParameter('id', $id)
+            ->orderBy('story_parts.order_number')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
+
+    /**
+     * @param $storyId
+     * @param $partId
+     * @return StoryParts
+     * @throws NonUniqueResultException
+     */
+    public function findByStoryIdAndByPartId($storyId, $partId): StoryParts
+    {
+        return $this->createQueryBuilder('story_parts')
+            ->andWhere('story_parts.story = :storyId')
+            ->andWhere('story_parts.parts = :partId')
+            ->setParameter('storyId', $storyId)
+            ->setParameter('partId', $partId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

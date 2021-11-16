@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello StoryController!{% endblock %}
+
+{% block body %}
+    <style>
+        .story-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .story-header__title {
+            font-size: 36px;
+        }
+
+        .story-header__extrainfo {
+            display: flex;
+        }
+
+        .story-header__extrainfo__item {
+            margin-right: 10px;
+        }
+
+        .story-content__row__container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .story-content__row__tag-item {
+            margin-right: 10px;
+        }
+
+        .story-content__row__tag-item a, .story-header__category a {
+            border-radius: 2px;
+            display: inline-flex;
+            font-size: 1em;
+            line-height: 1.3em;
+            padding-left: 4px;
+            padding-right: 4px;
+            background-color: var(--tag-default-backgroundColor);
+            color: var(--as-link);
+            transition: all .3s ease;
+        }
+
+        .story-content__row__tag-item a:hover {
+            color: var(--as-link-hover);
+        }
+
+        .story-content {
+            background-color: #3e3e3f;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            padding: 15px;
+        }
+
+        .story-content__row {
+            margin-bottom: 5px;
+        }
+
+        .story-management {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .story-management__item {
+            min-height: 80px;
+            min-width: 80px;
+            background-color: #ccc;
+            border-radius: 2px;
+            vertical-align: middle;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .story-management__item a {
+            color: black;
+        }
+    </style>
+
+    <div>
+        <div class="story-container">
+            <div class="story-header">
+                <div class="story-header__title">
+                    {{ story.title }}
+                </div>
+                <div class="story-header__category">
+                    <a href="/">
+                        {{ story.category.name }}
+                    </a>
+                </div>
+                <div class="story-header__extrainfo">
+                    <div class="story-header__extrainfo__item">
+                        <div class="story-header__fandom">
+                            {{ story.fandom.name }}
+                        </div>
+                    </div>
+                    <div class="story-header__extrainfo__item">
+                        <div class="story-header__status">
+                            {{ story.status.name }}
+                        </div>
+                    </div>
+                    <div class="story-header__extrainfo__item">
+                        <div class="story-header__likes">
+                            likes 0
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-content">
+                <div class="story-content__row">
+                    <div>
+                        Автор:
+                    </div>
+                    <div>
+                        {{ story.author.username }}
+                    </div>
+                </div>
+                <div class="story-content__row">
+                    <div>
+                        Метки:
+                    </div>
+                    <div class="story-content__row__container">
+                        {% for tag in story.tags %}
+                            <div class="story-content__row__tag-item">
+                                <a href="/">
+                                    {{ tag.name }}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="story-content__row">
+                    <div>Описание:</div>
+                    <div>{{ story.description }}</div>
+                </div>
+                <div class="story-content__row">
+                    <div>Примечание автора:</div>
+                    <div>{{ story.authorsNote }}</div>
+                </div>
+            </div>
+            <div class="story-management">
+                <div class="story-management__item">
+                    <a href="/">Нравится</a>
+                </div>
+                <div class="story-management__item">
+                    <a href="/">Отзывы</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

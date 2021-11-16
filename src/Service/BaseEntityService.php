@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\BaseEntity;
 use App\Interfaces\BaseEntityServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormInterface;
 
 class BaseEntityService implements BaseEntityServiceInterface
 {
@@ -20,16 +21,21 @@ class BaseEntityService implements BaseEntityServiceInterface
         $this->em = $em;
     }
 
-    public function create(BaseEntity $entity): void
+    /**
+     * @param FormInterface $form
+     */
+    public function create(FormInterface $form): void
     {
+        $entity = $form->getData();
         $this->em->persist($entity);
         $this->em->flush();
     }
 
+
     /**
-     * @param BaseEntity $entity
+     * @param FormInterface $form
      */
-    public function update(BaseEntity $entity): void
+    public function update(FormInterface $form): void
     {
         $this->em->flush();
     }
