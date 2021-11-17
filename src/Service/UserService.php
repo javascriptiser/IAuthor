@@ -95,8 +95,13 @@ class UserService extends BaseEntityService implements UserServiceInterface
 
     public function updateAvatarAjax($file, User $user)
     {
+        $prevImageName = $user->getImage();
         $base64Image = $this->base64FileExtractor->extractBase64String($file);
         $imageFile = new UploadedBase64File($base64Image, "blabla");
+
+
+
+
         $imageName = $this->uploader->upload($imageFile);
         $user->setImage($imageName);
         $this->em->flush();

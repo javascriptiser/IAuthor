@@ -2,44 +2,43 @@
     <style>
         .admin-header__container {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-around;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e5dacc;
+            margin-bottom: 10px;
         }
+
+        .admin-header__container a {
+            margin-top: 10px;
+        }
+
+        .adminNavbarShowContainer {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5dacc;
+        }
+
     </style>
     {% if is_granted('ROLE_ADMIN') %}
-        <a class="btn btn-primary"
-           data-toggle="collapse"
-           href="#collapseAdminNavbar"
-           role="button"
-           aria-expanded="false"
-           aria-controls="collapseAdminNavbar">
-            Показать административную панель
-        </a>
+        <div class="adminNavbarShowContainer">
+            <a class="default-link-btn"
+               data-toggle="collapse"
+               href="#collapseAdminNavbar"
+               role="button"
+               aria-expanded="false"
+               aria-controls="collapseAdminNavbar">
+                Показать административную панель
+            </a>
+        </div>
         <div class="admin-header__container collapse" id="collapseAdminNavbar">
-            <div class="admin-header__item">
-                <a class="link-primary" href={{ path("admin_user") }}>Пользователи</a>
-            </div>
-            <div class="admin-header__item">
-                <a class="link-primary" href={{ path("admin_story") }}>Рассказы</a>
-            </div>
-            <div class="admin-header__item">
-                <a class="link-primary" href={{ path("admin_fandom") }}>Фэндомы</a>
-            </div>
-            <div class="admin-header__item">
-                <a class="link-primary" href={{ path("admin_category") }}>Категории</a>
-            </div>
-            <div class="admin-header__item">
-                <a class="link-primary" href={{ path("admin_status") }}>Статус</a>
-            </div>
-            <div class="admin-header__item">
-                <a class="link-primary" href={{ path("admin_tag") }}>Метки</a>
-            </div>
-            <div class="admin-header__item">
-                <a class="link-primary" href={{ path("admin_character") }}>Персонажи</a>
-            </div>
-            <div class="admin-header__item">
-                <a class="link-primary" href={{ path("admin_mpaaRating") }}>Рейтинг</a>
-            </div>
+            <a class="default-link-btn" href={{ path("admin_user") }}>Пользователи</a>
+            <a class="default-link-btn" href={{ path("admin_story") }}>Рассказы</a>
+            <a class="default-link-btn" href={{ path("admin_fandom") }}>Фэндомы</a>
+            <a class="default-link-btn" href={{ path("admin_category") }}>Категории</a>
+            <a class="default-link-btn" href={{ path("admin_status") }}>Статус</a>
+            <a class="default-link-btn" href={{ path("admin_tag") }}>Метки</a>
+            <a class="default-link-btn" href={{ path("admin_character") }}>Персонажи</a>
+            <a class="default-link-btn" href={{ path("admin_mpaaRating") }}>Рейтинг</a>
         </div>
     {% endif %}
 {% endblock %}

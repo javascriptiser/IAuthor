@@ -11,6 +11,7 @@ use App\Service\UserService;
 use App\Voter\AdminVoter;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -51,20 +52,24 @@ class UserProfileController extends AbstractController
     {
         if ($request->isXmlHttpRequest()) {
             $this->userService->updateAvatarAjax($request->request->get('image'), $user);
-//            $this->userService->updateAvatarAjax($request->files->get('image'), $user);
             return new JsonResponse(1);
         }
         $prevImageName = $user->getImage();
         $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
         $form = $this->createFormBuilder($user)
-            ->add('image', FileType::class)
-            ->add('save', SubmitType::class, ['label' => 'Подтвердить'])
-            ->getForm();
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // $this->userService->updateWithImage($prevImageName, $form);
-            return new RedirectResponse($this->generateUrl('user_profile', ['id' => $user->getId()]));
-        }
+            ->add('image', FileType::class,[
+                'label'=>'Изображение'
+            ]);
+
+        $form->get('image')->addModelTransformer(new CallBackTransformer(
+            function ($imageUrl) {
+                return null;
+            },
+            function ($imageUrl) {
+                return $imageUrl;
+            }
+        ));
+        $form = $form->getForm();
         return $this->render('user/changeAvatar.html.twig', [
             'form' => $form->createView(),
             'prevImageName' => $prevImageName

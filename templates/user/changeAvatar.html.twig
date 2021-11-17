@@ -7,16 +7,30 @@
         .user-changeAvatar__container {
             display: flex;
             justify-content: flex-start;
-            align-items: center;
-            width: 100%;
+            align-items: center;;
             padding: 20px;
             background-color: #ccc;
             margin-left: 6px;
         }
 
+        .preview_container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+
+        }
+
+        .avatarForm {
+            width: 100%;
+        }
+        button{
+            width: 100%;
+        }
         .page-wrapper {
             display: grid;
-            grid-template-columns: 0.5fr 1.5fr;
+            grid-template-columns: 0.8fr 1.5fr;
             grid-template-rows: 1fr;
             gap: 150px 0px;
             grid-template-areas:
@@ -26,10 +40,10 @@
     <div class="page-wrapper">
         {{ include('layouts/userSettings.html.twig') }}
         <div class="user-changeAvatar__container">
-            {{ form_start(form) }}
+            {{ form_start(form,{'attr':{'class':'avatarForm'}}) }}
             {{ form_row(form.image, { 'attr':{'id':'imageInput'} }) }}
-            <div>
-                <p>Предпоказ</p>
+            <p>Предпоказ</p>
+            <div class="preview_container">
                 <img src="
         {% if prevImageName is defined and prevImageName is not null %}
          {{ asset('uploads/') }}{{ prevImageName }}
@@ -37,11 +51,15 @@
        {{ asset('images/defaultBanner.png') }}
         {% endif %}"
                      id="imagePreview" data-userId= {{ app.user.id }} height="100px">
+                <p>Так будет выглядеть на сайте</p>
+                <div class="preview">
+
+                </div>
             </div>
-            {{ form_row(form.save) }}
-            <button id="test">test</button>
+            <button id="test" class="btn btn-success">Загрузить</button>
             {{ form_end(form) }}
         </div>
+
     </div>
 {% endblock %}
 
@@ -55,10 +73,11 @@
             const element = document.getElementById('form_image');
             element.addEventListener('change', async (event) => {
                 await window.imageModule.readUrl(event.target)
-                $('#imagePreview').cropper({
-                    aspectRatio: 16 / 9,
-                });
+                $('#imagePreview').cropper('destroy');
+                window.imageModule.init();
             })
+            window.imageModule.init();
+
 
             const btn = document.getElementById('test');
             btn.addEventListener('click', (event) => {
@@ -70,26 +89,22 @@
                 });
                 canvas.toBlob(function (blob) {
                     const id = $($('*[data-userId]')[0]).attr('data-userId');
-                    console.log(id)
                     const url = URL.createObjectURL(blob);
                     const reader = new FileReader();
                     reader.readAsDataURL(blob);
                     reader.onloadend = function () {
                         var base64data = reader.result;
-                        console.log(base64data)
                         $.ajax({
                             url: `/user/avatar/${id}`,
                             method: 'POST',
                             data: {image: base64data},
                             success: function (data) {
-                                console.log('success')
+                                window.location.replace(`/user/${id}`);
                             }
                         });
                     };
                 });
             })
-
-
         }
 
 

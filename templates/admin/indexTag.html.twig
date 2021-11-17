@@ -1,40 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Все теги{% endblock %}
 
 {% block body %}
     <div class="wrapper">
-        <h1>Tags</h1>
+        <h1>Все теги</h1>
         <div class="knp_pagination_filter">
             {{ knp_pagination_filter(pagination, {'t.id':'ID','t.name':'Name'},template = 'twitter_bootstrap_v4_filtration.html.twig') }}
         </div>
-        <div>
-            <a class="btn btn-primary btn-sm" href={{ path('tag_create') }}>
-                Add new tag
+        <div class="mb-2 mt-2">
+            <a class="default-link-btn" href={{ path('tag_create') }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-plus-circle"
+                     viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                </svg>
+                Добавить новый тег
             </a>
         </div>
-        <table class="table table-hover table-responsive">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-            </tr>
-            {% for tag in pagination %}
+        <div class="table-responsive">
+            <table class="table table-hover">
                 <tr>
-                    <td>{{ tag.id }}</td>
-                    <td>{{ tag.name }}</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href={{ path('tag_update',{id:tag.id}) }}>
-                           Edit
-                        </a>
-                    </td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href={{ path('tag_delete',{id:tag.id}) }}>
-                           Delete
-                        </a>
-                    </td>
+                    <th>Идентификатор</th>
+                    <th>Название</th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-        </table>
+                {% for tag in pagination %}
+                    <tr>
+                        <td>{{ tag.id }}</td>
+                        <td>{{ tag.name }}</td>
+                        <td>
+                            <a class="default-link-btn" href={{ path('tag_update',{id:tag.id}) }}>
+                                Изменить
+                            </a>
+                        </td>
+                        <td>
+                            <a class="default-link-btn" href={{ path('tag_delete',{id:tag.id}) }}>
+                                Удалить
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
     <div class="navigation text-center">
         {{ knp_pagination_render(pagination,'twitter_bootstrap_v3_pagination.html.twig') }}

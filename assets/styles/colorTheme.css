@@ -2,15 +2,28 @@
     --color-primary: #4f2d01;
     --color-secondary: #fbfbfe;
     --color-accent: #fd6f53;
-    --font-color: #0c0202;
+    --font-color: #4f2d01;
     --font-color-hover: #000;
-    --story-background-color: #faf5ea;
-    --btn-default-color: #4f2d01;;
-    --btn-default-borderColor: #4f2d01;
-    --btn-default-backgroundColor: #f6ecda;
+    --story-background-color: #f6ecda;
     --tag-default-backgroundColor: #ede0c9;
     --as-link: #4f2d01;
     --as-link-hover: #ccc;
+    --blend-mode: #442302;
+    /**/
+    --main-navbar__link: #4f2d01;
+    --page__wrapper_background: #faf5ea;
+    --disclamer-color: #c69e6b;
+    --avatar-holder__link-color: #c69e6b;
+    --dropdown-menu__link-color: #4f2d01;
+    --dropdown-menu__background-color: #f6ecda;
+    --btn-default-color: #4f2d01;
+    --btn-default-color__hover: #4f2d01;
+    --btn-default-borderColor: #4f2d01;
+    --btn-default-borderColor__hover: #130b00;
+    --btn-default-backgroundColor: #f6ecda;
+    --btn-default-backgroundColor__hover: #ecd7b1;
+    --main-app-title__color: #c69e6b;
+
 
 }
 
@@ -18,13 +31,26 @@
     --color-primary: #d8d4ca;
     --color-secondary: #243133;
     --color-accent: #12cdea;
-    --font-color: #ffffff;
+    --font-color: #d8d4ca;
     --font-color-hover: #ccc;
     --story-background-color: #3e3e3f;
-    --btn-default-color: #ededed;
-    --btn-default-borderColor: #ededed;
-    --btn-default-backgroundColor: #2d2d2f;
     --tag-default-backgroundColor: #696969;
     --as-link: #d8d4ca;
     --as-link-hover: #ccc;
+    --blend-mode: #2d2d2f;
+    /**/
+    --main-navbar__link: #EDEDED;
+    --page__wrapper_background: #2d2d2f;
+    --disclamer-color: #c69e6b;
+    --avatar-holder__link-color: #c69e6b;
+    --dropdown-menu__link-color: #f6ecda;
+    --dropdown-menu__background-color: #3e3e3f;
+    --btn-default-color: #ededed;
+    --btn-default-color__hover: #2d2d2f;
+    --btn-default-borderColor: #ededed;
+    --btn-default-borderColor__hover: #2d2d2f;
+    --btn-default-backgroundColor: #2d2d2f;
+    --btn-default-backgroundColor__hover: #ededed;
+    --main-app-title__color: #D8D4CA;
+
 }

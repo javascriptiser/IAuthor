@@ -16,14 +16,35 @@
 </head>
 <body>
 <style>
-
+    .disclamer {
+        text-align: center;
+        color: var(--disclamer-color)
+    }
+    .page__wrapper{
+        border-radius: 10px;
+        background-color: var(--page__wrapper_background);
+        padding: 15px;
+    }
 </style>
 <div class="container">
-    {{ include('layouts/navbar.html.twig') }}
-    {{ include('layouts/adminNavbar.html.twig') }}
-    {{ include('layouts/userNavbar.html.twig') }}
-    {% block body %}
-    {% endblock %}
+    <div class="container container__inner">
+        {{ include('layouts/navbar.html.twig') }}
+        <div class="book-stiches-horizontal hidden-xs"></div>
+        <div class="book-stiches-vertical hidden-xs"></div>
+        <div class="book-corner-top hidden-xs"></div>
+        <div class="book-corner-bottom hidden-xs"></div>
+
+        <div class="page__wrapper">
+             {{ include('layouts/adminNavbar.html.twig') }}
+            {{ include('layouts/userNavbar.html.twig') }}
+            {% block body %}
+            {% endblock %}
+        </div>
+    </div>
+    <p class="disclamer">Права на все произведения, опубликованные на сайте, принадлежат авторам произведений.
+        Администрация
+        не несет
+        ответственности за содержание работ.</p>
 </div>
 {% block javascript_footer %}
 {% endblock %}

@@ -7,7 +7,7 @@ export const imageModule = {
                 reader.onload = function (e) {
                     $('#imagePreview')
                         .attr('src', e.target.result)
-                        .width(150)
+                        .width(200)
                         .height(200);
                     resolve(reader.result)
                 };
@@ -15,5 +15,27 @@ export const imageModule = {
                 reader.readAsDataURL(input.files[0]);
             })
         }
+    },
+    init: function () {
+        var $image = $('#imagePreview')
+
+        $('.preview').css({
+            overflow: 'hidden',
+            maxHeight: 70,
+            maxWidth: 70,
+            minHeight: 70,
+            minWidth: 70,
+            borderRadius: '50%'
+        });
+
+        $image.cropper({
+            minCropBoxWidth: 100,
+            minCropBoxHeight: 100,
+            preview: '.preview',
+            ready: function (e) {
+                $(this).cropper('setData', {});
+            }
+        });
     }
+
 }
