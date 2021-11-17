@@ -131,7 +131,10 @@
                 maximumSelectionLength: 2
             });
             $(select).on('select2:select', function (e) {
-                console.log('select event');
+                const id = $(select).val();
+                if (id !== "") {
+                    window.location.replace(`/readstory/${id}`);
+                }
             });
         };
     </script>

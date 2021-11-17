@@ -29,6 +29,11 @@ class MpaaRating extends \App\Entity\BaseEntity
      */
     private $stories;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $color;
+
     public function __construct()
     {
         $this->stories = new ArrayCollection();
@@ -77,6 +82,18 @@ class MpaaRating extends \App\Entity\BaseEntity
                 $story->setMpaaRating(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): self
+    {
+        $this->color = $color;
 
         return $this;
     }

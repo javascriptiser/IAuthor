@@ -6,6 +6,8 @@ use App\Entity\BaseEntity;
 use App\Entity\Category;
 use App\Entity\Character;
 use App\Entity\Fandom;
+use App\Entity\MpaaRating;
+use App\Entity\Status;
 use App\Entity\Story;
 use App\Entity\Tag;
 use App\Entity\User;
@@ -82,11 +84,28 @@ class StoryRepository extends ServiceEntityRepository
             ->setParameter('id', $character->getId());
         return $qb;
     }
+
     public function getStoryByTagId(Tag $tag): QueryBuilder
     {
         $qb = $this->queryFindAll();
         $qb->andWhere('tags.id = :id')
             ->setParameter('id', $tag->getId());
+        return $qb;
+    }
+
+    public function getStoryByStatusId(Status $status): QueryBuilder
+    {
+        $qb = $this->queryFindAll();
+        $qb->andWhere('status.id = :id')
+            ->setParameter('id', $status->getId());
+        return $qb;
+    }
+
+    public function getStoryByMpaaRatingId(MpaaRating $mpaaRating): QueryBuilder
+    {
+        $qb = $this->queryFindAll();
+        $qb->andWhere('mpaaRating.id = :id')
+            ->setParameter('id', $mpaaRating->getId());
         return $qb;
     }
 

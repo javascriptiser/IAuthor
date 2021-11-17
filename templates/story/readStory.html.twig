@@ -20,6 +20,7 @@
 
         .story-header__extrainfo__item {
             margin-right: 10px;
+            margin-top: 10px;
         }
 
         .story-content__row__container {
@@ -27,28 +28,8 @@
             flex-wrap: wrap;
         }
 
-        .story-content__row__tag-item {
-            margin-right: 10px;
-        }
-
-        .story-content__row__tag-item a, .story-header__category a {
-            border-radius: 2px;
-            display: inline-flex;
-            font-size: 1em;
-            line-height: 1.3em;
-            padding-left: 4px;
-            padding-right: 4px;
-            background-color: var(--tag-default-backgroundColor);
-            color: var(--as-link);
-            transition: all .3s ease;
-        }
-
-        .story-content__row__tag-item a:hover {
-            color: var(--as-link-hover);
-        }
-
         .story-content {
-            background-color: #3e3e3f;
+            background-color: var(--story-background-color);
             border-radius: 5px;
             margin-bottom: 15px;
             padding: 15px;
@@ -67,6 +48,7 @@
             min-height: 80px;
             min-width: 80px;
             background-color: #ccc;
+            padding: 0 10px;
             border-radius: 2px;
             vertical-align: middle;
             margin-right: 10px;
@@ -78,78 +60,183 @@
         .story-management__item a {
             color: black;
         }
+
+        .story-parts__container {
+
+        }
+
+        .story-parts__container-item {
+            display: flex;
+            flex-direction: column;
+            border-radius: 3px;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            text-decoration: none;
+            background-color: var(--part-list-background-color);
+            color: inherit;
+        }
+
+        .story-parts__container-item:hover {
+            background-color: var(--part-list-background-color__hover);
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .arrow {
+            position: absolute;
+            right: 0;
+            top: 0;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+        }
+
+        .part-title {
+            font-size: 18px;
+        }
+
+        .author-info {
+            text-decoration: underline;
+        }
+
+        i {
+            line-height: 0.4;
+        }
+
+        .hat-creator-container {
+            display: flex;
+            align-items: center;
+        }
     </style>
 
-    <div>
-        <div class="story-container">
-            <div class="story-header">
-                <div class="story-header__title">
-                    {{ story.title }}
-                </div>
-                <div class="story-header__category">
-                    <a href="/">
-                        {{ story.category.name }}
+<div>
+    <div class="story-container">
+        <div class="story-header">
+            <div class="story-header__title">
+                {{ story.title }}
+            </div>
+            <div class="story-header__category">
+                <a href="{{ path('stories/category_show', {'id': story.category.id}) }}"
+                   class=""
+                >
+                    {{ story.category.name }}
+                </a>
+            </div>
+            <div class="story-header__extrainfo">
+                <div class="story-header__extrainfo__item">
+                    <a href="{{ path('stories/fandom_show', {'id': story.fandom.id}) }}"
+                       class="default-link-btn"
+                       style="background:{{ story.fandom.color }}"
+                    >
+                        {{ story.fandom.name }}
                     </a>
                 </div>
-                <div class="story-header__extrainfo">
-                    <div class="story-header__extrainfo__item">
-                        <div class="story-header__fandom">
-                            {{ story.fandom.name }}
-                        </div>
-                    </div>
-                    <div class="story-header__extrainfo__item">
-                        <div class="story-header__status">
-                            {{ story.status.name }}
-                        </div>
-                    </div>
-                    <div class="story-header__extrainfo__item">
-                        <div class="story-header__likes">
-                            likes 0
-                        </div>
-                    </div>
+                <div class="story-header__extrainfo__item">
+                    <a href="{{ path('stories/status_show', {'id': story.status.id}) }}"
+                       class="default-link-btn"
+                       style="background:{{ story.status.color }}"
+                    >
+                        {{ story.status.name }}
+                    </a>
                 </div>
-            </div>
-            <div class="story-content">
-                <div class="story-content__row">
-                    <div>
-                        Автор:
-                    </div>
-                    <div>
-                        {{ story.author.username }}
-                    </div>
-                </div>
-                <div class="story-content__row">
-                    <div>
-                        Метки:
-                    </div>
-                    <div class="story-content__row__container">
-                        {% for tag in story.tags %}
-                            <div class="story-content__row__tag-item">
-                                <a href="/">
-                                    {{ tag.name }}
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="story-content__row">
-                    <div>Описание:</div>
-                    <div>{{ story.description }}</div>
-                </div>
-                <div class="story-content__row">
-                    <div>Примечание автора:</div>
-                    <div>{{ story.authorsNote }}</div>
-                </div>
-            </div>
-            <div class="story-management">
-                <div class="story-management__item">
-                    <a href="/">Нравится</a>
-                </div>
-                <div class="story-management__item">
-                    <a href="/">Отзывы</a>
+                <div class="story-header__extrainfo__item">
+                    <a href="{{ path('stories/mpaaRating_show', {'id': story.mpaaRating.id}) }}"
+                       class="default-link-btn"
+                       style="background:{{ story.mpaaRating.color }}"
+                    >
+                        {{ story.mpaaRating.name }}
+                    </a>
                 </div>
             </div>
         </div>
+        <div class="story-content">
+            <div class="story-content__row">
+                <div class="hat-creator-container">
+                    <div class="mr-3">
+                        <img class='avatar-holder'
+                                {% if story.author.image is null %}
+                                    src="{{ asset('images/defaultBanner.png') }}" alt=""
+                                {% else %}
+                                    src="{{ asset('uploads/') }}{{ story.author.image }}" alt=""
+                                {% endif %}
+                        >
+                    </div>
+                    <div class="d-flex flex-column mb-3">
+                        <a href="/" class="author-info">{{ story.author.username }}</a>
+                        <i>автор</i>
+                    </div>
+                </div>
+            </div>
+            <div class="story-content__row">
+                <div>
+                    Метки:
+                </div>
+                <div class="story-content__row__container">
+                    {% for tag in story.tags %}
+                        <div class="mr-3">
+                            <a href="/" class="default-link-tag">
+                                {{ tag.name }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="story-content__row">
+                <div>
+                    Персонажи:
+                </div>
+                <div class="story-content__row__container">
+                    {% for character in story.characters %}
+                        <div class="mr-3">
+                            <a href="/" class="default-link-tag">
+                                {{ character.name }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="story-content__row">
+                <div>Описание:</div>
+                <div>{{ story.description }}</div>
+            </div>
+            <div class="story-content__row">
+                <div>Примечание автора:</div>
+                <div>{{ story.authorsNote }}</div>
+            </div>
+        </div>
+        <div class="story-management">
+            <div class="story-management__item">
+                <a href="/">Нравится</a>
+            </div>
+            <div class="story-management__item">
+                <a href="/">Отзывы</a>
+            </div>
+            {% if story.author.id == app.user.id %}
+            <div class="story-management__item">
+                <a href="{{ path('story_update', {'id': story.id}) }}">Редактировать шапку</a>
+            </div>
+            {% endif %}
+        </div>
     </div>
+    {% if not story.storyParts.isEmpty() %}
+        <h1 class="text-center">Содержание</h1>
+        <div class="story-parts__container">
+            {% for story_part in story.storyParts %}
+                <a href="/" class="story-parts__container-item">
+                    <div class="part-title">
+                        {{ story_part.parts.title }}
+                    </div>
+                    <div class="d-flex position-relative">
+                        <div class="part-date mr-2">Дата</div>
+                        <div>Отзывы</div>
+                        <img class="arrow"
+                             src="https://img.icons8.com/external-becris-lineal-becris/64/000000/external-next-mintab-for-ios-becris-lineal-becris.png"/>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 {% endblock %}
 

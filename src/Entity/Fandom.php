@@ -34,6 +34,11 @@ class Fandom extends \App\Entity\BaseEntity
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $color;
+
 
     public function __construct()
     {
@@ -95,6 +100,18 @@ class Fandom extends \App\Entity\BaseEntity
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): self
+    {
+        $this->color = $color;
 
         return $this;
     }

@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\Character;
 use App\Entity\Fandom;
+use App\Entity\MpaaRating;
+use App\Entity\Status;
 use App\Entity\Story;
 use App\Entity\Tag;
 use App\Form\StoryType;
@@ -47,7 +49,7 @@ class StoryController extends AbstractController
 
         return $this->baseController->create(
             $request,
-            new StoryType(),
+            StoryType::class,
             'admin_story',
             'story/index.html.twig',
         );
@@ -58,7 +60,7 @@ class StoryController extends AbstractController
     {
         return $this->baseController->update(
             $request,
-            new StoryType(),
+            StoryType::class,
             $story,
             'admin_story',
             'story/index.html.twig',
@@ -93,6 +95,13 @@ class StoryController extends AbstractController
         ]);
     }
 
+    #[Route('stories/all', name: 'stories/all_show')]
+    public function showStoriesAll(Request $request): Response
+    {
+        $query = $this->storyRepository->queryFindAll()->getQuery()->getResult();
+        return $this->baseController->showWithPagination($request, $query, 'story/readStories.html.twig');
+    }
+
     #[Route('stories/category/{id}', name: 'stories/category_show')]
     public function showStoriesInCategory(Request $request, Category $category): Response
     {
@@ -118,6 +127,19 @@ class StoryController extends AbstractController
     public function showStoriesInTags(Request $request, Tag $tag): Response
     {
         $query = $this->storyRepository->getStoryByTagId($tag)->getQuery()->getResult();
+        return $this->baseController->showWithPagination($request, $query, 'story/readStories.html.twig');
+    }
+
+    #[Route('stories/status/{id}', name: 'stories/status_show')]
+    public function showStoriesInStatus(Request $request, Status $status): Response
+    {
+        $query = $this->storyRepository->getStoryByStatusId($status)->getQuery()->getResult();
+        return $this->baseController->showWithPagination($request, $query, 'story/readStories.html.twig');
+    }
+    #[Route('stories/mpaaRating/{id}', name: 'stories/mpaaRating_show')]
+    public function showStoriesInMpaaRating(Request $request, MpaaRating $mpaaRating): Response
+    {
+        $query = $this->storyRepository->getStoryByMpaaRatingId($mpaaRating)->getQuery()->getResult();
         return $this->baseController->showWithPagination($request, $query, 'story/readStories.html.twig');
     }
 

@@ -4,8 +4,6 @@
     --color-accent: #fd6f53;
     --font-color: #4f2d01;
     --font-color-hover: #000;
-    --story-background-color: #f6ecda;
-    --tag-default-backgroundColor: #ede0c9;
     --as-link: #4f2d01;
     --as-link-hover: #ccc;
     --blend-mode: #442302;
@@ -23,7 +21,13 @@
     --btn-default-backgroundColor: #f6ecda;
     --btn-default-backgroundColor__hover: #ecd7b1;
     --main-app-title__color: #c69e6b;
-
+    --part-list-background-color: #faf5ea;
+    --part-list-background-color__hover: #e5dacc;
+    --tag-default-backgroundColor: #ede0c9;
+    --tag-default-color: #4f2d01;
+    --tag-default-color__hover: #c69e6b;
+    --tag-default-backgroundColor__hover: #ede0c9;
+    --story-background-color: #f6ecda;
 
 }
 
@@ -33,8 +37,6 @@
     --color-accent: #12cdea;
     --font-color: #d8d4ca;
     --font-color-hover: #ccc;
-    --story-background-color: #3e3e3f;
-    --tag-default-backgroundColor: #696969;
     --as-link: #d8d4ca;
     --as-link-hover: #ccc;
     --blend-mode: #2d2d2f;
@@ -52,5 +54,12 @@
     --btn-default-backgroundColor: #2d2d2f;
     --btn-default-backgroundColor__hover: #ededed;
     --main-app-title__color: #D8D4CA;
+    --part-list-background-color: #696969;
+    --part-list-background-color__hover: #3e3e3f;
+    --tag-default-backgroundColor: #696969;
+    --tag-default-color: #d8d4ca;
+    --tag-default-color__hover: #d8d4ca;
+    --tag-default-backgroundColor__hover: #696969;
+    --story-background-color: #3e3e3f;
 
 }

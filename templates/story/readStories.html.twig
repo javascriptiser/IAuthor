@@ -11,7 +11,7 @@
         }
 
         .stories-item {
-            background-color: #545050;
+            background-color: var(--story-background-color);
             margin-bottom: 15px;
             padding: 10px;
             border-radius: 15px;
@@ -19,6 +19,7 @@
 
         .stories-item__extrainfo {
             display: flex;
+            padding-bottom: 10px;
         }
 
         .stories-item__extrainfo__item {
@@ -31,22 +32,6 @@
 
         .stories-item__title a {
             font-size: 24px;
-        }
-
-        .stories-item__tags {
-            margin-bottom: 5px;
-        }
-
-        .stories-item__tags a, .stories-item__characters a {
-            border-radius: 2px;
-            display: inline-flex;
-            font-size: 1em;
-            line-height: 1.3em;
-            padding-left: 4px;
-            padding-right: 4px;
-            background-color: var(--tag-default-backgroundColor);
-            color: var(--as-link);
-            transition: all .3s ease
         }
 
         .stories-item__description {
@@ -64,24 +49,42 @@
                             {{ story.title }}
                         </a>
                     </div>
-                    <div class="stories-item__extrainfo">
+                    <div class="stories-item__extrainfo"
+                         style="border-bottom: 1px solid {{ story.status.color }}"
+                    >
                         <div class="stories-item__extrainfo__item">
-                            {{ story.mpaaRating.name }}
+                            <a href="{{ path('stories/fandom_show', {'id': story.fandom.id}) }}"
+                               class="default-link-btn"
+                               style="background:{{ story.fandom.color }}"
+                            >
+                                {{ story.fandom.name }}
+                            </a>
                         </div>
                         <div class="stories-item__extrainfo__item">
-                            {{ story.status.name }}
+                            <a href="{{ path('stories/mpaaRating_show', {'id': story.mpaaRating.id}) }}"
+                               class="default-link-btn"
+                               style="background:{{ story.mpaaRating.color }}"
+                            >
+                                {{ story.mpaaRating.name }}
+                            </a>
+                        </div>
+                        <div class="stories-item__extrainfo__item">
+                            <a href="{{ path('stories/status_show', {'id': story.status.id}) }}"
+                               class="default-link-btn"
+                               style="color:{{ story.status.color }}"
+                            >
+                                {{ story.status.name }}
+                            </a>
                         </div>
                     </div>
 
                     <div class="stories-item__author">Автор: <a href="/">{{ story.author.username }}</a></div>
-                    <div class="stories-item__fandom">
-                        Фэндом: <a href="{{ path('stories/fandom_show', {'id': story.fandom.id}) }}">
-                            {{ story.fandom.name }}
-                        </a></div>
                     <div class="stories-item__characters">
                         Персонажи:
                         {% for character in story.characters %}
-                            <a href="{{ path('stories/character_show', {'id': character.id}) }}">
+                            <a href="{{ path('stories/character_show', {'id': character.id}) }}"
+                               class="default-link-tag"
+                            >
                                 {{ character.name }}
                             </a>
                         {% endfor %}
@@ -89,7 +92,9 @@
                     <div class="stories-item__tags">
                         Метки:
                         {% for tag in story.tags %}
-                            <a href="{{ path('stories/tag_show', {'id': tag.id}) }}">
+                            <a href="{{ path('stories/tag_show', {'id': tag.id}) }}"
+                               class="default-link-tag"
+                            >
                                 {{ tag.name }}
                             </a>
                         {% endfor %}

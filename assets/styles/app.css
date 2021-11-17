@@ -1,6 +1,7 @@
 body {
     background-color: var(--color-secondary);
     color: var(--font-color);
+    font-family: Verdana, sans-serif !important;
 }
 
 a {
@@ -134,4 +135,21 @@ body {
     background-color: var(--btn-default-backgroundColor__hover);
     border: 1px solid var(--btn-default-borderColor__hover);
     color: var(--btn-default-color__hover);
+}
+
+.default-link-tag {
+    border-radius: 2px;
+    display: inline-flex;
+    font-size: 1em;
+    line-height: 1.3em;
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: var(--tag-default-backgroundColor);
+    color: var(--tag-default-color);
+    transition: all .3s ease
+}
+
+.default-link-tag:hover {
+    background-color: var(--tag-default-backgroundColor__hover);
+    color: var(--tag-default-color__hover);
 }
