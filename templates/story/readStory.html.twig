@@ -1,9 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello StoryController!{% endblock %}
+{% block title %}#ЯАВТОР {{ story.title }}{% endblock %}
 
 {% block body %}
     <style>
+        .editor-preview-active {
+            background-color: var(--story-background-color);
+            color: var(--as-link);
+        }
+
         .story-header {
             display: flex;
             flex-direction: column;
@@ -77,9 +82,15 @@
             color: inherit;
         }
 
+        .new {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+
         .story-parts__container-item:hover {
             background-color: var(--part-list-background-color__hover);
-            color: inherit;
             text-decoration: none;
         }
 
@@ -109,8 +120,6 @@
             align-items: center;
         }
     </style>
-
-<div>
     <div class="story-container">
         <div class="story-header">
             <div class="story-header__title">
@@ -174,7 +183,8 @@
                 </div>
                 <div class="story-content__row__container">
                     {% for tag in story.tags %}
-                        <div class="mr-3">
+                        <div class="mr-3" data-toggle="tooltip" data-placement="top"
+                             title="{{ tag.description }}">
                             <a href="/" class="default-link-tag">
                                 {{ tag.name }}
                             </a>
@@ -189,7 +199,10 @@
                 <div class="story-content__row__container">
                     {% for character in story.characters %}
                         <div class="mr-3">
-                            <a href="/" class="default-link-tag">
+                            <a href="/" class="default-link-tag"
+                               data-toggle="tooltip" data-placement="top"
+                               title="{{ character.description }}"
+                            >
                                 {{ character.name }}
                             </a>
                         </div>
@@ -213,9 +226,9 @@
                 <a href="/">Отзывы</a>
             </div>
             {% if story.author.id == app.user.id %}
-            <div class="story-management__item">
-                <a href="{{ path('story_update', {'id': story.id}) }}">Редактировать шапку</a>
-            </div>
+                <div class="story-management__item">
+                    <a href="{{ path('story_update', {'id': story.id}) }}">Редактировать шапку</a>
+                </div>
             {% endif %}
         </div>
     </div>
@@ -223,20 +236,62 @@
         <h1 class="text-center">Содержание</h1>
         <div class="story-parts__container">
             {% for story_part in story.storyParts %}
-                <a href="/" class="story-parts__container-item">
+                <div class="story-parts__container-item">
                     <div class="part-title">
                         {{ story_part.parts.title }}
                     </div>
                     <div class="d-flex position-relative">
                         <div class="part-date mr-2">Дата</div>
-                        <div>Отзывы</div>
+                        <div class="mr-2">Отзывы</div>
+                        <a
+                                data-toggle="collapse"
+                                data-target="#collapse_{{ story_part.parts.id }}"
+                                aria-expanded="false"
+                                aria-controls="{{ story_part.parts.id }}"
+                        >
+                            Читать
+                        </a>
                         <img class="arrow"
                              src="https://img.icons8.com/external-becris-lineal-becris/64/000000/external-next-mintab-for-ios-becris-lineal-becris.png"/>
                     </div>
-                </a>
+                    <div class="collapse" id="collapse_{{ story_part.parts.id }}">
+                        <span>Примечания:</span>
+                        <div>{{ story_part.parts.commentBeforePart }}</div>
+                        <textarea id="textArea_{{ story_part.parts.id }}">{{ story_part.parts.text }}</textarea>
+                        <span>Примечания:</span>
+                        <div>{{ story_part.parts.commentAfterPart }}</div>
+                    </div>
+                </div>
             {% endfor %}
+            <a href="{{ path('user_part_create', {'id': story.id}) }}"
+               class="story-parts__container-item new d-flex position-relative">
+                <img src="https://img.icons8.com/ios/50/000000/new-by-copy.png" width="20" height="20"/>
+                <span>Добавить новую часть</span>
+            </a>
         </div>
     {% endif %}
-</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        window.onload = function () {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+            const simplemde = {};
+
+            $('[id^="textArea_"]').each(function (idx, ele) {
+                simplemde[ele.id] = new window.simpleMde({
+                    element: ele,
+                    autofocus: true,
+                    toolbar: false,
+                    toolbarTips: false,
+                });
+                simplemde[ele.id].togglePreview();
+
+            })
+        }
+    </script>
 {% endblock %}
 

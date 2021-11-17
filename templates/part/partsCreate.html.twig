@@ -1,19 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Parts{% endblock %}
+{% block title %}#ЯАВТОР{% endblock %}
 
 {% block body %}
+
     {{ form_start(form) }}
     <div class="my-custom-class-for-errors">
         {{ form_errors(form) }}
     </div>
-
-    <div class="row">
-        {{ form_row(form.title) }}
-        {{ form_row(form.text) }}
-        {{ form_row(form.commentBeforePart) }}
-        {{ form_row(form.commentAfterPart) }}
-        {{ form_row(form.save) }}
-    </div>
+    {{ form_row(form.title) }}
+    {{ form_row(form.text) }}
+    {{ form_row(form.commentBeforePart) }}
+    {{ form_row(form.commentAfterPart) }}
+    {{ form_row(form.save) }}
     {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        window.onload = function () {
+            const text_area_symfony = document.getElementById("part_text")
+            const simplemde = new window.simpleMde({
+                element: text_area_symfony,
+                forceSync: true,
+            });
+
+
+
+            simplemde.codemirror.on("change", function () {
+                // $(text_area_symfony).val(simplemde.value())
+            });
+        }
+    </script>
 {% endblock %}

@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Parts;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,20 +17,21 @@ class PartType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
-                'label' => 'title'
+                'label' => 'Название части'
             ])
-            ->add('text', TextType::class, [
+            ->add('text', TextareaType::class, [
                 'required' => true,
-                'label' => 'text'
+                'label' => 'Содержание'
             ])
             ->add('commentBeforePart', TextType::class, [
                 'required' => true,
-                'label' => 'Comment before'
+                'label' => 'Комментарии перед частью'
             ])->add('commentAfterPart', TextType::class, [
                 'required' => true,
-                'label' => 'Comment after'
+                'label' => 'Комментарии после части'
             ])
             ->add('save', SubmitType::class, [
+                'label' => 'Сохранить',
                 'attr' => [
                     'class' => 'btn btn-success '
                 ]

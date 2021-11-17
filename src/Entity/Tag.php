@@ -29,6 +29,11 @@ class Tag extends \App\Entity\BaseEntity
      */
     private $stories;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $description;
+
     public function __construct()
     {
         $this->stories = new ArrayCollection();
@@ -74,6 +79,18 @@ class Tag extends \App\Entity\BaseEntity
         if ($this->stories->removeElement($story)) {
             $story->removeTag($this);
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

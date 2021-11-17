@@ -120,10 +120,23 @@
             font-family: Verdana, sans-serif;
             font-size: 24px;
             text-decoration: none;
+            width: 150px;
         }
 
         .main-app__title:hover {
             color: var(--main-app-title__color);
+        }
+
+        .guest__container {
+            display: flex;
+        }
+
+        .guest__container a {
+            color: var(--guest-sign-color)
+        }
+
+        .guest__container a:hover {
+            text-decoration: underline;
         }
     </style>
     <div class="header-holder">
@@ -134,8 +147,9 @@
                 <span class="slider round"></span>
             </label>
         </div>
-        <div class="dropdown">
-            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('IS_AUTHENTICATED_FULLY') %}
+
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('IS_AUTHENTICATED_FULLY') %}
+            <div class="dropdown">
                 <div>
                     <a href="/" class="avatar-holder__link">{{ app.user.name }} {{ app.user.lastname }}</a>
                     <img class='avatar-holder'
@@ -152,14 +166,12 @@
                     <a href={{ path("user_my_stories") }}>Мои рассказы</a>
                     <a href={{ path("app_logout") }}>Выход</a>
                 </div>
-            {% else %}
-                <div>
-                    <a class="navbar-brand" href={{ path("app_login") }}>Вход</a>
-                </div>
-                <div>
-                    <a class="navbar-brand" href={{ path("registration") }}>Регистрация</a>
-                </div>
-            {% endif %}
-        </div>
+            </div>
+        {% else %}
+            <div class="guest__container">
+                <a class="navbar-brand" href={{ path("app_login") }}>Вход</a>
+                <a class="navbar-brand" href={{ path("registration") }}>Регистрация</a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

@@ -34,6 +34,11 @@ class Status extends \App\Entity\BaseEntity
      */
     private $color;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $description;
+
     public function __construct()
     {
         $this->stories = new ArrayCollection();
@@ -94,6 +99,18 @@ class Status extends \App\Entity\BaseEntity
     public function setColor(?string $color): self
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

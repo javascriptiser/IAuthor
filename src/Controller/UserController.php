@@ -17,8 +17,8 @@ class UserController extends AbstractController
 
     public function __construct
     (
-        UserService $userService,
-        BaseController       $baseController,
+        UserService    $userService,
+        BaseController $baseController,
     )
     {
         $this->baseController = $baseController;
@@ -30,7 +30,7 @@ class UserController extends AbstractController
     {
         return $this->baseController->create(
             $request,
-            new UserCreateType(),
+            UserCreateType::class,
             'admin_user',
             'user/userCreate.html.twig',
         );

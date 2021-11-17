@@ -20,25 +20,27 @@ class UserCreateType extends AbstractType
         $builder
             ->add('email', EmailType::class,[
                 'required'=>true,
-                'label'=>'Email'
+                'label'=>'Почта'
             ])
             ->add('image', FileType::class, [
                 'required' => false,
                 'data_class' => null,
-                'label' => 'image',
+                'label' => 'Изображение',
                 'attr' => [
-                    'placeholder' => 'image'
+                    'placeholder' => 'Изображение'
                 ]
             ])
             ->add('username', TextType::class,[
                 'required'=>true,
-                'label'=>'Username'
+                'label'=>'Имя пользователя'
             ])
             ->add('password', PasswordType::class,[
                 'required'=>true,
-                'label'=>'Password'
+                'label'=>'Пароль'
             ])
-            ->add('Save', SubmitType::class)
+            ->add('Save', SubmitType::class,[
+                'label'=>'Сохранить'
+            ])
         ;
     }
 

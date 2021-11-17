@@ -34,6 +34,7 @@ body {
     background-blend-mode: luminosity;
     background: url("/public/images/1.jpg") var(--blend-mode);
     position: relative;
+    min-height: 100vh;
 }
 
 .book-stiches-horizontal::before, .book-stiches-horizontal::after {

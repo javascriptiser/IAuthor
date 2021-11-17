@@ -28,6 +28,7 @@
     --tag-default-color__hover: #c69e6b;
     --tag-default-backgroundColor__hover: #ede0c9;
     --story-background-color: #f6ecda;
+    --guest-sign-color: black;
 
 }
 
@@ -61,5 +62,17 @@
     --tag-default-color__hover: #d8d4ca;
     --tag-default-backgroundColor__hover: #696969;
     --story-background-color: #3e3e3f;
+    --guest-sign-color: white;
+}
 
+.editor-toolbar a {
+    color: var(--as-link) !important;
+}
+
+.editor-toolbar a:hover {
+    color: #2c3e50 !important;
+}
+
+.CodeMirror, .CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
+    background-color: var(--story-background-color) !important;
 }

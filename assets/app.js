@@ -12,6 +12,7 @@ import './styles/media.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.css';
 import 'select2/dist/css/select2.min.css'
+import 'simplemde/dist/simplemde.min.css'
 
 const $ = require('jquery');
 global.$ = global.jQuery = $;
@@ -25,6 +26,9 @@ import {imageModule} from "./js/imageModule";
 import 'cropperjs/dist/cropper.min'
 import 'cropperjs/dist/cropper.min.css'
 import 'jquery-cropper/dist/jquery-cropper.min'
+import SimpleMDE from 'simplemde/dist/simplemde.min'
+
+window.simpleMde = SimpleMDE;
 
 
 window.imageModule = imageModule;

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}#ЯАВТОР Все рассказы{% endblock %}
 
 {% block body %}
     <style>
@@ -56,6 +56,8 @@
                             <a href="{{ path('stories/fandom_show', {'id': story.fandom.id}) }}"
                                class="default-link-btn"
                                style="background:{{ story.fandom.color }}"
+                               data-toggle="tooltip" data-placement="top"
+                               title="{{ story.fandom.description }}"
                             >
                                 {{ story.fandom.name }}
                             </a>
@@ -64,6 +66,8 @@
                             <a href="{{ path('stories/mpaaRating_show', {'id': story.mpaaRating.id}) }}"
                                class="default-link-btn"
                                style="background:{{ story.mpaaRating.color }}"
+                               data-toggle="tooltip" data-placement="top"
+                               title="{{ story.mpaaRating.description }}"
                             >
                                 {{ story.mpaaRating.name }}
                             </a>
@@ -72,6 +76,8 @@
                             <a href="{{ path('stories/status_show', {'id': story.status.id}) }}"
                                class="default-link-btn"
                                style="color:{{ story.status.color }}"
+                               data-toggle="tooltip" data-placement="top"
+                               title="{{ story.status.description }}"
                             >
                                 {{ story.status.name }}
                             </a>
@@ -84,6 +90,8 @@
                         {% for character in story.characters %}
                             <a href="{{ path('stories/character_show', {'id': character.id}) }}"
                                class="default-link-tag"
+                               data-toggle="tooltip" data-placement="top"
+                               title="{{ character.description }}"
                             >
                                 {{ character.name }}
                             </a>
@@ -94,6 +102,8 @@
                         {% for tag in story.tags %}
                             <a href="{{ path('stories/tag_show', {'id': tag.id}) }}"
                                class="default-link-tag"
+                               data-toggle="tooltip" data-placement="top"
+                               title="{{ tag.description }}"
                             >
                                 {{ tag.name }}
                             </a>
@@ -111,4 +121,15 @@
     </div>
 {% endblock %}
 
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        window.onload = function () {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        }
+    </script>
+{% endblock %}
 

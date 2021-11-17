@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello User!{% endblock %}
+{% block title %}Регистрация нового пользователя{% endblock %}
 
 {% block body %}
     {{ form_start(form) }}
@@ -8,11 +8,8 @@
         {{ form_errors(form) }}
     </div>
 
-    <div class="row">
-        {{ form_row(form.username) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.password, {'value':''}) }}
-{#        {{ form_widget(form.password, {'value' : ''}) }}#}
-    </div>
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.password, {'value':''}) }}
     {{ form_end(form) }}
 {% endblock %}
