@@ -80,11 +80,17 @@ class Story extends BaseEntity
      */
     private $storyParts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Review::class, mappedBy="story")
+     */
+    private $reviews;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->characters = new ArrayCollection();
         $this->storyParts = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -262,6 +268,33 @@ class Story extends BaseEntity
             if ($storyPart->getStory() === $this) {
                 $storyPart->setStory(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Review[]
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->addStory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            $review->removeStory($this);
         }
 
         return $this;

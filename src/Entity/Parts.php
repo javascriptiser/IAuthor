@@ -45,10 +45,16 @@ class Parts extends BaseEntity
      */
     private $storyParts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Comments::class, mappedBy="part")
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->partsOrders = new ArrayCollection();
         $this->storyParts = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,6 +136,33 @@ class Parts extends BaseEntity
             if ($storyPart->getParts() === $this) {
                 $storyPart->setParts(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comments[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comments $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->addPart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comments $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            $comment->removePart($this);
         }
 
         return $this;

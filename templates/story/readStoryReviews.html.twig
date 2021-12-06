@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}#ЯАВТОР {{ story.title }}{% endblock %}
+
 {% set mnths = ['','января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'] %}
 
 {% block body %}
@@ -25,6 +26,7 @@
         .reviews-text p {
             word-break: break-all;
         }
+
         .editor-preview-active {
             background-color: var(--story-background-color);
             color: var(--as-link);
@@ -120,7 +122,7 @@
             position: absolute;
             right: 0;
             top: 0;
-            transform: translateY(2px);
+            transform: translateY(-50%);
             width: 20px;
             height: 20px;
         }
@@ -240,152 +242,48 @@
                 <div>{{ story.authorsNote }}</div>
             </div>
         </div>
-        <div class="story-management">
-            <div class="story-management__item">
-                <a href="/">Нравится</a>
-            </div>
-            <div class="story-management__item">
-                <a href="{{ path('story/reviews_read', {'id': story.id}) }}">
-                    Отзывы
-                </a>
-            </div>
-            {% if app.user is not null and app.user.id == story.author.id  %}
-                <div class="story-management__item">
-                    <a href="{{ path('story_update', {'id': story.id}) }}">Редактировать шапку</a>
+        {% if app.user %}
+            {{ form_start(form) }}
+            {{ form_row(form.text) }}
+            {{ form_row(form.reviews_confirm) }}
+            {{ form_end(form) }}
+        {% endif %}
+        <div class="reviews-list__container">
+
+            {% for review in story.reviews %}
+                <div class="reviews-list__item">
+                    <div class="user_image">
+                        {% if review.user.image %}
+                            <img src="{{ asset('uploads/') }}{{ review.user.image }}" alt="">
+                        {% else %}
+                            <img src="{{ asset('images/defaultBanner.png') }}" alt="">
+                        {% endif %}
+                    </div>
+                    <div class="reviews_container">
+                        <div>
+                            <span>
+                               {{ review.user.username }}
+                            </span>,
+                            <span>оставлен
+                                {{ review.createdAt|date("j") }}
+                                {{ mnths[review.createdAt|date("n")] }}
+                                {{ review.createdAt|date("Y") }}
+                                {{ review.createdAt|date("H") }}:{{ review.createdAt|date("s") }}
+                            </span>
+                        </div>
+                        <div class="reviews-text">
+                            <p>{{ review.text }}</p>
+                        </div>
+                    </div>
                 </div>
-            {% endif %}
+                {% if app.user == review.user %}
+                    <a class="default-link-btn mt-2" href="{{ path('reviews_delete', {'id': review.id}) }}">
+                        Удалить
+                    </a>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
-    {% if not story.storyParts.isEmpty() %}
-        <h1 class="text-center">Содержание</h1>
-        <div class="story-parts__container">
-            {% for story_part in story.storyParts %}
-                <div class="story-parts__container-item">
-                    <div class="d-flex position-relative part-title">
-                        <a
-                                data-toggle="collapse"
-                                data-target="#collapse_{{ story_part.parts.id }}"
-                                aria-expanded="false"
-                                aria-controls="{{ story_part.parts.id }}"
-                        >
-                            {{ story_part.parts.title }}
-                        </a>
-                        <img class="arrow"
-                             src="https://img.icons8.com/external-becris-lineal-becris/64/000000/external-next-mintab-for-ios-becris-lineal-becris.png"/>
-                    </div>
-                    <div class="collapse" id="collapse_{{ story_part.parts.id }}">
-                        <span>Примечания:</span>
-                        <div><i>{{ story_part.parts.commentBeforePart }}</i></div>
-                        <textarea id="textArea_{{ story_part.parts.id }}">{{ story_part.parts.text }}</textarea>
-                        <span>Примечания:</span>
-                        <div><i>{{ story_part.parts.commentAfterPart }}</i></div>
-                        {% if app.user %}
-                            <p class="mt-2">Твой комментарий к рассказу</p>
-                            <textarea
-                                    class="mt-2"
-                                    id="commentsTextArea_{{ story_part.parts.id }}"></textarea>
-                            <button
-                                    class="default-link-btn"
-                                    id="comment_comment_confirm_{{ story_part.parts.id }}"
-                                    data-part="{{ story_part.parts.id }}"
-                            >
-                                Добавить комментарий
-                            </button>
-                        {% endif %}
-                        {% for comment in story_part.parts.comments %}
-                            <div class="reviews-list__item">
-                                <div class="user_image">
-                                    {% if comment.user.image %}
-                                        <img src="{{ asset('uploads/') }}{{ comment.user.image }}" alt="">
-                                    {% else %}
-                                        <img src="{{ asset('images/defaultBanner.png') }}" alt="">
-                                    {% endif %}
-                                </div>
-                                <div class="reviews_container">
-                                    <div>
-                            <span>
-                               {{ comment.user.username }}
-                            </span>,
-                                        <span>оставлен
-                                {{ comment.createdAt|date("j") }}
-                                            {{ mnths[comment.createdAt|date("n")] }}
-                                            {{ comment.createdAt|date("Y") }}
-                                            {{ comment.createdAt|date("H") }}:{{ comment.createdAt|date("s") }}
-                            </span>
-                                    </div>
-                                    <div class="reviews-text">
-                                        <p>{{ comment.text }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            {% if app.user == comment.user %}
-                                <a class="default-link-btn mt-2" href="{{ path('comments_delete', {'id': comment.id}) }}">
-                                    Удалить комментарий
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endfor %}
-            <a href="{{ path('user_part_create', {'id': story.id}) }}"
-               class="story-parts__container-item new d-flex position-relative">
-                <img src="https://img.icons8.com/ios/50/000000/new-by-copy.png" width="20" height="20"/>
-                <span>Добавить новую часть</span>
-            </a>
-        </div>
-    {% endif %}
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        window.onload = function () {
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
-            })
-            const simplemde = {};
-
-            $('[id^="textArea_"]').each(function (idx, ele) {
-                simplemde[ele.id] = new window.simpleMde({
-                    element: ele,
-                    autofocus: true,
-                    toolbar: false,
-                    toolbarTips: false,
-                });
-                simplemde[ele.id].togglePreview();
-            })
-
-            const commentsSimpleMde = {}
-            $('[id^="commentsTextArea_"]').each(function (idx, ele) {
-                ele.nextElementSibling.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    let part = this.dataset.part;
-                    $.ajax({
-                        url: `/createCommentsForPart/${part}`,
-                        method: 'POST',
-                        contentType: "application/json",
-                        dataType: 'json',
-                        data: JSON.stringify({
-                            text: ele.value,
-                            partsId: part,
-                            storyId: {{ story.id }},
-                        }),
-                        success: function (data) {
-                            console.log(data)
-                            window.location.replace(`/readstory/{{story.id }}`);
-                        }
-                    });
-                })
-                commentsSimpleMde[ele.id] = new window.simpleMde({
-                    element: ele,
-                    autofocus: true,
-                    forceSync: true,
-                    toolbar: false,
-                    toolbarTips: false,
-                });
-
-            })
-        }
-    </script>
-{% endblock %}
 

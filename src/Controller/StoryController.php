@@ -4,18 +4,28 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Character;
+use App\Entity\Comments;
 use App\Entity\Fandom;
 use App\Entity\MpaaRating;
+use App\Entity\Review;
 use App\Entity\Status;
 use App\Entity\Story;
 use App\Entity\Tag;
+use App\Form\CommentType;
+use App\Form\ReviewType;
 use App\Form\StoryType;
 use App\Repository\StoryRepository;
+use App\Service\CommentsService;
+use App\Service\ReviewsService;
 use App\Service\StoryService;
 use Doctrine\ORM\NonUniqueResultException;
 use Exception;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,6 +36,8 @@ class StoryController extends AbstractController
     private BaseController $baseController;
     private PaginatorInterface $paginator;
     private StoryRepository $storyRepository;
+    private ReviewsService $reviewsService;
+    private CommentsService $commentsService;
 
     public function __construct
     (
@@ -34,13 +46,19 @@ class StoryController extends AbstractController
         Security           $security,
         PaginatorInterface $paginator,
         StoryRepository    $storyRepository,
+        ReviewsService     $reviewsService,
+        CommentsService    $commentsService,
     )
     {
         $this->baseController = $baseController;
-        $storyService->setUser($security->getUser());
+        if ($security->getUser()) {
+            $storyService->setUser($security->getUser());
+        }
         $this->baseController->setService($storyService);
         $this->paginator = $paginator;
         $this->storyRepository = $storyRepository;
+        $this->reviewsService = $reviewsService;
+        $this->commentsService = $commentsService;
     }
 
     #[Route('/admin/story/create', name: 'story_create')]
@@ -84,15 +102,69 @@ class StoryController extends AbstractController
     /**
      * @throws NonUniqueResultException
      */
-    #[Route('/readstory/{id}', name: 'story_read')]
+    #[Route('/readstory/{id}', name: 'story_read', methods: ['GET'])]
     public function readStory(Story $story): Response
     {
-//        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
         $proxyStory = $this->storyRepository->getStoryById($story)->getQuery()->getOneOrNullResult();
 
         return $this->render('story/readStory.html.twig', [
             'story' => $proxyStory,
         ]);
+    }
+
+    #[Route('/createCommentsForPart/{id}', name: 'comments_create', methods: ['POST'])]
+    public function readStoryAjax(Request $request): Response
+    {
+        if ($request->isXmlHttpRequest()) {
+            $parametersAsArray = [];
+            if ($content = $request->getContent()) {
+                $parametersAsArray = json_decode($content, true);
+            }
+            $text = $parametersAsArray['text'];
+            $partsId = $parametersAsArray['partsId'];
+            $storyId = $parametersAsArray['storyId'];
+            $this->commentsService->createComment($text, $partsId, $this->getUser());
+            return new JsonResponse(1);
+//            return new RedirectResponse($this->generateUrl('story_read', ['id' => $storyId]));
+        } else {
+//            return new JsonResponse(0);
+        }
+    }
+    #[Route('/comment/{id}/delete', name: 'comments_delete')]
+    public function deleteStoryComment(Comments $comments): Response
+    {
+        $this->commentsService->deleteComment($comments);
+        return new RedirectResponse($this->generateUrl('home'));
+    }
+
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    #[Route('/story/{id}/reviews', name: 'story/reviews_read')]
+    public function readStoryReviews(Story $story, Request $request): Response
+    {
+        $proxyStory = $this->storyRepository->getStoryById($story)->getQuery()->getOneOrNullResult();
+        $form = $this->createForm(ReviewType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->reviewsService->createReview($form->getData(), $story, $this->getUser());
+            return new RedirectResponse($this->generateUrl('story/reviews_read', ['id' => $story->getId()]));
+        }
+
+        return $this->render('story/readStoryReviews.html.twig', [
+            'story' => $proxyStory,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/review/{id}/delete', name: 'reviews_delete')]
+    public function deleteStoryReview(Review $review): Response
+    {
+        $this->reviewsService->deleteReview($review);
+        return new RedirectResponse($this->generateUrl('story/reviews_read', ['id' => $review->getStory()->getId()]));
     }
 
     #[Route('stories/all', name: 'stories/all_show')]
@@ -136,6 +208,7 @@ class StoryController extends AbstractController
         $query = $this->storyRepository->getStoryByStatusId($status)->getQuery()->getResult();
         return $this->baseController->showWithPagination($request, $query, 'story/readStories.html.twig');
     }
+
     #[Route('stories/mpaaRating/{id}', name: 'stories/mpaaRating_show')]
     public function showStoriesInMpaaRating(Request $request, MpaaRating $mpaaRating): Response
     {

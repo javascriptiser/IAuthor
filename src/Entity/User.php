@@ -72,9 +72,22 @@ class User extends \App\Entity\BaseEntity implements UserInterface, PasswordAuth
      */
     private $lastname;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Review::class, mappedBy="user")
+     */
+    private $reviews;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="user")
+     */
+    private $comments;
+
+
     public function __construct()
     {
         $this->stories = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -261,4 +274,66 @@ class User extends \App\Entity\BaseEntity implements UserInterface, PasswordAuth
 
         return $this;
     }
+
+    /**
+     * @return Collection|Review[]
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getUser() === $this) {
+                $review->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comments[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comments $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comments $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

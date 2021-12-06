@@ -60,10 +60,6 @@ class StoryService extends BaseEntityService
         $story = $form->getData();
         if ($this->isStoryInstance($story)) {
             $story->setAuthor($this->user);
-//            $image = $form->get('image')->getData();
-//            if ($image) {
-//                $this->uploader->upload($image);
-//            }
         }
         $this->em->persist($story);
         $this->em->flush();

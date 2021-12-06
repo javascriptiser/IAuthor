@@ -33,7 +33,7 @@ class StoryRepository extends ServiceEntityRepository
     public function queryFindAll(): QueryBuilder
     {
         return $this->createQueryBuilder('story')
-            ->select('story,author,category,fandom,status,mpaaRating,tags,characters,storyParts')
+            ->select('story,author,category,fandom,status,mpaaRating,tags,characters,storyParts,reviews,parts,comments')
             ->innerJoin('story.author', 'author', 'WITH', 'author = story.author')
             ->innerJoin('story.category', 'category', 'WITH', 'category = story.category')
             ->innerJoin('story.fandom', 'fandom', 'WITH', 'fandom = story.fandom')
@@ -41,7 +41,10 @@ class StoryRepository extends ServiceEntityRepository
             ->innerJoin('story.mpaaRating', 'mpaaRating', 'WITH', 'mpaaRating = story.mpaaRating')
             ->innerJoin('story.tags', 'tags',)
             ->innerJoin('story.characters', 'characters')
-            ->leftJoin('story.storyParts', 'storyParts', 'WITH', 'story = storyParts.story');
+            ->leftJoin('story.reviews', 'reviews')
+            ->leftJoin('story.storyParts', 'storyParts', 'WITH', 'story = storyParts.story')
+            ->leftJoin('storyParts.parts', 'parts')
+            ->leftJoin('parts.comments', 'comments');
     }
 
     public function getAllUsersStories(UserInterface $user): QueryBuilder
