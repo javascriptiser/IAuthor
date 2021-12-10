@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Fandom;
 use App\Form\FandomType;
+use App\Repository\FandomRepository;
 use App\Service\FandomService;
 use App\Service\FileUploader;
 use App\Voter\AdminVoter;
 use Exception;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,17 +21,38 @@ class FandomController extends AbstractController
 {
     private BaseController $baseController;
     private FandomService $fandomService;
+    private FandomRepository $fandomRepository;
+    private PaginatorInterface $paginator;
 
 
     public function __construct
     (
-        BaseController $baseController,
-        FandomService  $fandomService,
+        BaseController     $baseController,
+        FandomService      $fandomService,
+        FandomRepository   $fandomRepository,
+        PaginatorInterface $paginator,
     )
     {
         $this->baseController = $baseController;
         $this->fandomService = $fandomService;
         $this->baseController->setService($fandomService);
+        $this->fandomRepository = $fandomRepository;
+        $this->paginator = $paginator;
+    }
+
+    #[Route('/fandom', name: 'fandom')]
+    public function index(Request $request): Response
+    {
+        $query = $this->fandomRepository->queryFindAll();
+        $pagination = $this->paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit', 7),
+        );
+
+        return $this->render('fandom/index.html.twig', [
+            'pagination' => $pagination
+        ]);
     }
 
     #[Route('/admin/fandom/create', name: 'fandom_create')]

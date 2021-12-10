@@ -82,12 +82,17 @@ class User extends \App\Entity\BaseEntity implements UserInterface, PasswordAuth
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Likes::class, mappedBy="user")
+     */
+    private $likes;
 
     public function __construct()
     {
         $this->stories = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -335,5 +340,34 @@ class User extends \App\Entity\BaseEntity implements UserInterface, PasswordAuth
         return $this;
     }
 
+    /**
+     * @return Collection|Likes[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Likes $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Likes $like): self
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getUser() === $this) {
+                $like->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 
 }

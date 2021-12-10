@@ -55,7 +55,6 @@ class UserProfileController extends AbstractController
             return new JsonResponse(1);
         }
         $prevImageName = $user->getImage();
-        $this->denyAccessUnlessGranted(AdminVoter::VIEW, $this->getUser(), "Access Denied. Only for Admins");
         $form = $this->createFormBuilder($user)
             ->add('image', FileType::class,[
                 'label'=>'Изображение'

@@ -14,8 +14,8 @@
     </style>
     <div class="main-navbar">
         <a href="{{ path('stories/all_show') }}" class="default-link-btn">Рассказы</a>
-        <a href="/" class="default-link-btn">Категории</a>
-        <a href="/" class="default-link-btn">Авторы</a>
-        <a href="/" class="default-link-btn">Заявки</a>
+        <a href="{{ path('category') }}" class="default-link-btn">Категории</a>
+        <a href="{{ path('fandom') }}" class="default-link-btn">Фэндомы</a>
+        <a href="{{ path('author') }}" class="default-link-btn">Авторы</a>
     </div>
 {% endblock %}

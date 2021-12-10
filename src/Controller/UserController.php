@@ -42,7 +42,7 @@ class UserController extends AbstractController
     {
         return $this->baseController->update(
             $request,
-            new UserCreateType(),
+            UserCreateType::class,
             $user,
             'admin_user',
             'user/userCreate.html.twig',

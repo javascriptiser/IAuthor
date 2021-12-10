@@ -21,7 +21,8 @@
             padding: 10px;
             position: relative;
         }
-        .my_story_stats-item{
+
+        .my_story_stats-item {
             margin-top: 5px;
             margin-bottom: 5px;
         }
@@ -116,7 +117,9 @@
                             </a>
                         </div>
                         <div class="my_story_stats-item">
-                            <a class="default-link-btn" href={{ path("home") }}>
+                            <a href="{{ path('statistics', {id:story.id}) }}"
+                               class="default-link-btn"
+                            >
                                 Статистика
                             </a>
                         </div>

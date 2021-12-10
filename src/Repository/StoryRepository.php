@@ -112,5 +112,13 @@ class StoryRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    public function getStoryByAuthorId(User $user): QueryBuilder
+    {
+        $qb = $this->queryFindAll();
+        $qb->andWhere('author.id = :id')
+            ->setParameter('id', $user->getId());
+        return $qb;
+    }
+
 
 }

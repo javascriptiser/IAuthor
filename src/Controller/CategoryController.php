@@ -11,6 +11,7 @@ use App\Service\CategoryService;
 use App\Voter\AdminVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,16 +24,22 @@ class CategoryController extends AbstractController
 {
     private BaseController $baseController;
     private CategoryService $categoryService;
+    private CategoryRepository $categoryRepository;
+    private PaginatorInterface $paginator;
 
     public function __construct
     (
-        BaseController  $baseController,
-        CategoryService $categoryService,
+        BaseController     $baseController,
+        CategoryService    $categoryService,
+        CategoryRepository $categoryRepository,
+        PaginatorInterface $paginator,
     )
     {
         $this->baseController = $baseController;
         $this->categoryService = $categoryService;
         $this->baseController->setService($categoryService);
+        $this->categoryRepository = $categoryRepository;
+        $this->paginator = $paginator;
     }
 
     #[Route('/admin/category/create', name: 'category_create')]
@@ -78,6 +85,21 @@ class CategoryController extends AbstractController
             'admin_category',
             'admin_category',
         );
+    }
+
+    #[Route('/category', name: 'category')]
+    public function index(Request $request): Response
+    {
+        $query = $this->categoryRepository->queryFindAll();
+        $pagination = $this->paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit', 7),
+        );
+
+        return $this->render('category/index.html.twig', [
+            'pagination' => $pagination
+        ]);
     }
 
 

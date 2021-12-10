@@ -85,12 +85,18 @@ class Story extends BaseEntity
      */
     private $reviews;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Likes::class, mappedBy="story")
+     */
+    private $likes;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->characters = new ArrayCollection();
         $this->storyParts = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -295,6 +301,33 @@ class Story extends BaseEntity
     {
         if ($this->reviews->removeElement($review)) {
             $review->removeStory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Likes[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Likes $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->addStory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Likes $like): self
+    {
+        if ($this->likes->removeElement($like)) {
+            $like->removeStory($this);
         }
 
         return $this;

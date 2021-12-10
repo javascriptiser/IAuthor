@@ -23,14 +23,14 @@ import './js/colorThemingModule'
 import './js/swiper'
 import Sortable from 'sortablejs/modular/sortable.core.esm.js';
 import {imageModule} from "./js/imageModule";
+import {likesModule} from "./js/likesModule";
 import 'cropperjs/dist/cropper.min'
 import 'cropperjs/dist/cropper.min.css'
 import 'jquery-cropper/dist/jquery-cropper.min'
 import SimpleMDE from 'simplemde/dist/simplemde.min'
 
 window.simpleMde = SimpleMDE;
-
-
 window.imageModule = imageModule;
+window.likesModule = likesModule;
 window.sortable = Sortable;
 

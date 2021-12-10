@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Все фандомы{% endblock %}
+
+{% block body %}
+    <style>
+        .user-header__avatar img{
+            width: 70px;
+            height: 70px;
+        }
+    </style>
+    <div class="wrapper w-100">
+        <h1>Все фандомы</h1>
+        <div class="knp_pagination_filter">
+            {{ knp_pagination_filter(
+                pagination,
+                {'f.id':'ID','f.name':'name'},
+                template = 'twitter_bootstrap_v4_filtration.html.twig',
+            ) }}
+        </div>
+        {% for user in pagination %}
+            <div class="d-flex align-items-center mt-2 mb-2">
+                <div class="mr-2">
+                    №{{ user.id }}
+                </div>
+                <div class="user-header__avatar mr-2">
+                    {% if user.image %}
+                        <img src="{{ asset('uploads/') }}{{ user.image }}" alt="">
+                    {% else %}
+                        <img src="{{ asset('images/defaultBanner.png') }}" alt="">
+                    {% endif %}
+                </div>
+                <div><a href="{{ path('stories/fandom_show', {'id': user.id}) }}">{{ user.name }}</a></div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="navigation text-center">
+        {{ knp_pagination_render(pagination,'twitter_bootstrap_v3_pagination.html.twig') }}
+    </div>
+{% endblock %}

@@ -82,6 +82,11 @@
                                 {{ story.status.name }}
                             </a>
                         </div>
+                        <div class="stories-item__extrainfo__item">
+                            <a class="default-link-btn">
+                               Нравится {{ story.getLikes.count }}
+                            </a>
+                        </div>
                     </div>
 
                     <div class="stories-item__author">Автор: <a href="/">{{ story.author.username }}</a></div>

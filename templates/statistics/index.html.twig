@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello StatisticsController!{% endblock %}
+{% set mnths = ['','января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'] %}
+
+{% block body %}
+<style>
+    .reviews-list__item {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        background-color: var(--story-background-color);
+        border-radius: 5px;
+        padding-right: 5px;
+        margin: 10px 0px;
+    }
+
+    .user_image img {
+        height: 70px;
+        margin: 10px;
+        width: 70px;
+        border-radius: 50%;
+    }
+
+    .reviews-text p {
+        word-break: break-all;
+    }
+</style>
+
+<div>
+    <div class="reviews-list__container">
+        <div>
+            <h4 class="mt-2 text-center">Отзывы</h4>
+        </div>
+        {% for review in reviews %}
+            <div class="reviews-list__item">
+                <div class="user_image">
+                    {% if review.user.image %}
+                        <img src="{{ asset('uploads/') }}{{ review.user.image }}" alt="">
+                    {% else %}
+                        <img src="{{ asset('images/defaultBanner.png') }}" alt="">
+                    {% endif %}
+                </div>
+                <div class="reviews_container">
+                    <div>
+                            <span>
+                               {{ review.user.username }}
+                            </span>,
+                        <span>оставлен
+                                {{ review.createdAt|date("j") }}
+                            {{ mnths[review.createdAt|date("n")] }}
+                            {{ review.createdAt|date("Y") }}
+                            {{ review.createdAt|date("H") }}:{{ review.createdAt|date("s") }}
+                            </span>
+                    </div>
+                    <div class="reviews-text">
+                        <p class="mt-2">{{ review.text }}</p>
+                    </div>
+                </div>
+            </div>
+            <a class="default-link-btn mt-2" href="{{ path('reviews_delete', {'id': review.id}) }}">
+                Удалить
+            </a>
+        {% endfor %}
+        <div>
+            <h4 class="mt-2 text-center">Комментарии</h4>
+        </div>
+        {% for parts in proxyStory.storyParts%}
+        {% for comment in parts.parts.comments %}
+            <div class="reviews-list__item">
+                <div class="user_image">
+                    {% if comment.user.image %}
+                        <img src="{{ asset('uploads/') }}{{ comment.user.image }}" alt="">
+                    {% else %}
+                        <img src="{{ asset('images/defaultBanner.png') }}" alt="">
+                    {% endif %}
+                </div>
+                <div class="reviews_container">
+                    <p class="mt-2">Рассказ:{{ proxyStory.title }} Глава: {{ parts.parts.title }}</p>
+                    <div>
+                            <span>
+                               {{ comment.user.username }}
+                            </span>,
+                        <span>оставлен
+                                {{ comment.createdAt|date("j") }}
+                            {{ mnths[comment.createdAt|date("n")] }}
+                            {{ comment.createdAt|date("Y") }}
+                            {{ comment.createdAt|date("H") }}:{{ comment.createdAt|date("s") }}
+                            </span>
+                    </div>
+                    <div class="reviews-text">
+                        <p>{{ comment.text }}</p>
+                    </div>
+                </div>
+            </div>
+            <a class="default-link-btn mt-2 mb-2"
+               href="{{ path('comments_delete', {'id': comment.id}) }}">
+                Удалить комментарий
+            </a>
+        {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

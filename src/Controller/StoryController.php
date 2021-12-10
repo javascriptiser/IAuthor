@@ -11,6 +11,7 @@ use App\Entity\Review;
 use App\Entity\Status;
 use App\Entity\Story;
 use App\Entity\Tag;
+use App\Entity\User;
 use App\Form\CommentType;
 use App\Form\ReviewType;
 use App\Form\StoryType;
@@ -109,6 +110,7 @@ class StoryController extends AbstractController
 
         return $this->render('story/readStory.html.twig', [
             'story' => $proxyStory,
+            'likesCount'=>$story->getLikes()->count(),
         ]);
     }
 
@@ -125,10 +127,8 @@ class StoryController extends AbstractController
             $storyId = $parametersAsArray['storyId'];
             $this->commentsService->createComment($text, $partsId, $this->getUser());
             return new JsonResponse(1);
-//            return new RedirectResponse($this->generateUrl('story_read', ['id' => $storyId]));
-        } else {
-//            return new JsonResponse(0);
         }
+        return new JsonResponse(0);
     }
     #[Route('/comment/{id}/delete', name: 'comments_delete')]
     public function deleteStoryComment(Comments $comments): Response
@@ -164,7 +164,7 @@ class StoryController extends AbstractController
     public function deleteStoryReview(Review $review): Response
     {
         $this->reviewsService->deleteReview($review);
-        return new RedirectResponse($this->generateUrl('story/reviews_read', ['id' => $review->getStory()->getId()]));
+        return new RedirectResponse($this->generateUrl('home'));
     }
 
     #[Route('stories/all', name: 'stories/all_show')]
@@ -213,6 +213,12 @@ class StoryController extends AbstractController
     public function showStoriesInMpaaRating(Request $request, MpaaRating $mpaaRating): Response
     {
         $query = $this->storyRepository->getStoryByMpaaRatingId($mpaaRating)->getQuery()->getResult();
+        return $this->baseController->showWithPagination($request, $query, 'story/readStories.html.twig');
+    }
+    #[Route('stories/author/{id}', name: 'stories/author_show')]
+    public function showStoriesInAuthors(Request $request, User $user): Response
+    {
+        $query = $this->storyRepository->getStoryByAuthorId($user)->getQuery()->getResult();
         return $this->baseController->showWithPagination($request, $query, 'story/readStories.html.twig');
     }
 
